@@ -5,6 +5,21 @@ import 'package:nepalihiphub/constant/app_colors.dart';
 const String fontfamily = 'Poppins';
 
 final darkTextTheme = ThemeData().textTheme.copyWith(
+    headlineLarge: TextStyle(
+        fontFamily: fontfamily,
+        fontSize: 26.sp,
+        fontWeight: FontWeight.w700,
+        color: white),
+    headlineMedium: TextStyle(
+        fontFamily: fontfamily,
+        fontSize: 24.sp,
+        fontWeight: FontWeight.w700,
+        color: white),
+    headlineSmall: TextStyle(
+        fontFamily: fontfamily,
+        fontSize: 22.sp,
+        fontWeight: FontWeight.w700,
+        color: white),
     titleLarge: TextStyle(
         fontFamily: fontfamily,
         fontSize: 18.sp,

@@ -1,14 +1,22 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:nepalihiphub/constant/api.dart';
 import 'package:nepalihiphub/model/beat_model.dart';
 
 class BeatServices {
   final dio = Dio();
+  Box box = Hive.box("localdata");
 
-  Future<Either<List<BeatModel>, String>> getFreeBeats() async {
+  Future<Either<List<BeatModel>, String>> getFreeBeats(String url) async {
+    String accessToken = box.get("accessToken") ?? "";
+    final headers = {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'Charset': 'utf-8',
+      'authorization': 'Bearer $accessToken'
+    };
     try {
-      final response = await dio.get(getBeat);
+      final response = await dio.get(url, options: Options(headers: headers));
       List<BeatModel> list = (response.data["beats"] as List)
           .map((e) => BeatModel.fromJson(e))
           .toList();
@@ -16,6 +24,7 @@ class BeatServices {
     } on DioException catch (e) {
       return right("Something went wrong:$e");
     } catch (e) {
+      print(e);
       return right("Something went wrong");
     }
   }

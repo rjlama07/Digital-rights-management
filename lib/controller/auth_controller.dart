@@ -36,7 +36,7 @@ class AuthController extends GetxController {
         (r) => {Get.snackbar("", r, backgroundColor: Colors.red)});
   }
 
-  void login(String email, String password) async {
+  Future<void> login(String email, String password) async {
     isLoginLoading.value = true;
     final response = await AuthServices().login(email, password);
     isLoginLoading.value = false;
@@ -49,7 +49,8 @@ class AuthController extends GetxController {
   }
 
   void logOut() {
-    box.put("isLoggedIn", true);
+    box.delete("accessToken");
+    box.put("isLoggedIn", false);
     isLoggedIn.value = false;
   }
 }

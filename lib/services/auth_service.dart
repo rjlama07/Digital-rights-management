@@ -4,6 +4,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:nepalihiphub/constant/api.dart';
 
 class AuthServices {
+  Box box = Hive.box("localdata");
   final dio = Dio();
   Future<Either<bool, String>> sigup(
       String firstname, String lastname, String email, String password) async {
@@ -17,6 +18,24 @@ class AuthServices {
     try {
       final response = await dio.post(signUpUrl, data: body);
       Hive.box("localData").put("accessToken", response.data["accessToken"]);
+      return left(true);
+    } on DioException catch (e) {
+      return right(e.response!.data["error"]);
+    }
+  }
+
+  Future<Either<bool, String>> changePassword(
+      String oldPassword, String newPassword) async {
+    String accessToken = box.get("accessToken");
+    final headers = {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'Charset': 'utf-8',
+      'authorization': 'Bearer $accessToken'
+    };
+    final body = {"oldPassword": oldPassword, "newPassword": newPassword};
+    try {
+      await dio.post(updatePassword,
+          data: body, options: Options(headers: headers));
       return left(true);
     } on DioException catch (e) {
       return right(e.response!.data["error"]);

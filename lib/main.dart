@@ -49,3 +49,10 @@ class MyApp extends StatelessWidget {
         });
   }
 }
+
+extension CapatilizeFirst on String {
+  String getString() {
+    String result = substring(0, 1).toUpperCase() + substring(1, length);
+    return result;
+  }
+}

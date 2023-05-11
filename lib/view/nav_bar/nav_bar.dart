@@ -19,9 +19,9 @@ class NavBar extends StatelessWidget {
           : SizedBox(
               height: 60,
               child: CustomPlayer(
-                  name: controller.name,
-                  imageUrl: controller.imageUrl,
-                  beatUrl: controller.beatUrl),
+                  name: controller.label,
+                  imageUrl: controller.imageURL,
+                  beatUrl: controller.beatURL),
             )),
       body: Obx(() => IndexedStack(
           index: controller.selectedIndex.value, children: controller.pages)),
@@ -54,7 +54,8 @@ class NavBar extends StatelessWidget {
 class CustomPlayer extends StatefulWidget {
   final String name;
   final String imageUrl;
-  const CustomPlayer(
+  final controller = Get.find<NavBarController>();
+  CustomPlayer(
       {Key? key,
       required this.beatUrl,
       required this.imageUrl,
@@ -68,38 +69,22 @@ class CustomPlayer extends StatefulWidget {
 }
 
 class _CustomPlayerState extends State<CustomPlayer> {
-  final audioPlayer = AudioPlayer();
-  Duration duration = Duration.zero;
-  Duration position = Duration.zero;
-  bool isPlaying = false;
   bool disposed = false;
 
   @override
   void initState() {
     super.initState();
 
-    audioPlayer.onPlayerStateChanged.listen((event) {
-      if (!disposed) {
-        setState(() {
-          isPlaying = event == PlayerState.playing;
-        });
-      }
+    widget.controller.audioPlayer.onPlayerStateChanged.listen((event) {
+      widget.controller.isPlaying.value = event == PlayerState.playing;
     });
 
-    audioPlayer.onDurationChanged.listen((event) {
-      if (!disposed) {
-        setState(() {
-          duration = event;
-        });
-      }
+    widget.controller.audioPlayer.onDurationChanged.listen((event) {
+      widget.controller.changeDuration(event);
     });
 
-    audioPlayer.onPositionChanged.listen((event) {
-      if (!disposed) {
-        setState(() {
-          position = event;
-        });
-      }
+    widget.controller.audioPlayer.onPositionChanged.listen((event) {
+      widget.controller.changePostion(event);
     });
 
     // _initAudioPlayer();
@@ -111,8 +96,7 @@ class _CustomPlayerState extends State<CustomPlayer> {
 
   @override
   void dispose() {
-    disposed = true;
-    audioPlayer.dispose();
+    // disposed = true;
     super.dispose();
   }
 
@@ -123,6 +107,7 @@ class _CustomPlayerState extends State<CustomPlayer> {
       child: InkWell(
         onTap: () {
           showModalBottomSheet(
+            backgroundColor: Colors.transparent,
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(20),
@@ -130,7 +115,10 @@ class _CustomPlayerState extends State<CustomPlayer> {
             isScrollControlled: true,
             context: context,
             builder: (context) {
-              return const MusicBottomSheet();
+              return MusicBottomSheet(
+                  imageUrl: widget.imageUrl,
+                  beatUrl: widget.beatUrl,
+                  name: widget.name);
             },
           );
         },
@@ -148,23 +136,24 @@ class _CustomPlayerState extends State<CustomPlayer> {
             Text(widget.name),
             const Spacer(),
             InkWell(
-              onTap: () async {
-                if (isPlaying) {
-                  audioPlayer.pause();
-                  isPlaying = false;
-                } else {
-                  await audioPlayer.play(UrlSource(widget.beatUrl));
-                  isPlaying = true;
-                }
-                if (!disposed) {
-                  setState(() {});
-                }
-              },
-              child: Icon(
-                isPlaying ? Icons.pause : Icons.play_arrow,
-                size: 26,
-              ),
-            ),
+                onTap: () async {
+                  if (widget.controller.isPlaying.value) {
+                    widget.controller.audioPlayer.pause();
+                    widget.controller.isPlaying.value = false;
+                  } else {
+                    await widget.controller.audioPlayer
+                        .play(UrlSource(widget.beatUrl));
+                    widget.controller.isPlaying.value = true;
+                  }
+                },
+                child: Obx(
+                  () => Icon(
+                    widget.controller.isPlaying.value
+                        ? Icons.pause
+                        : Icons.play_arrow,
+                    size: 26,
+                  ),
+                )),
             const SizedBox(width: 10),
           ],
         ),

@@ -3,6 +3,7 @@ import 'package:get/get_core/get_core.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:nepalihiphub/controller/auth_controller.dart';
+import 'package:nepalihiphub/controller/profile_controller.dart';
 import 'package:nepalihiphub/widget/custom_button.dart';
 
 class Authpage extends StatelessWidget {
@@ -161,7 +162,7 @@ class Authpage extends StatelessWidget {
                         ? controller.isSignUpLoading.value
                         : controller.isLoginLoading.value,
                     text: !controller.isSignup.value ? "Login" : "Signup",
-                    ontap: () {
+                    ontap: () async {
                       if (controller.isSignup.value) {
                         controller.signUp(
                             firstnameController.text,
@@ -173,8 +174,10 @@ class Authpage extends StatelessWidget {
                                   content: Text("User signup sucessfully")));
                         });
                       } else {
-                        controller.login(
+                        await controller.login(
                             emailController.text, passwordController.text);
+
+                        Get.put(ProfileController()).getUser();
                       }
                     },
                   )),

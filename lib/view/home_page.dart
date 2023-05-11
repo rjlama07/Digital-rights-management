@@ -186,7 +186,7 @@ class Homepage extends StatelessWidget {
                                 musicTitle: freeBeatController
                                     .freeBeats[index].beatName!,
                                 musicArtist: freeBeatController
-                                    .freeBeats[index].beatName!,
+                                    .freeBeats[index].producerName!,
                                 requiredViews: "100m Streams",
                                 imageUrl: freeBeatController
                                     .freeBeats[index].imageUrl!,
@@ -267,8 +267,18 @@ class Homepage extends StatelessWidget {
               Obx(() => freeBeatController.isLoading.value
                   ? const Center(child: CircularProgressIndicator())
                   : ListView.separated(
+                      physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemBuilder: (context, index) => ListTile(
+                            onTap: () {
+                              musicController.changeMusic(
+                                  imageUrl: freeBeatController
+                                      .freeBeats[index].imageUrl!,
+                                  name:
+                                      "${freeBeatController.freeBeats[index].beatName!}-${freeBeatController.freeBeats[index].producerName!}",
+                                  beatUrl: freeBeatController
+                                      .freeBeats[index].beatUrl!);
+                            },
                             contentPadding: EdgeInsets.zero,
                             leading: Container(
                               height: 45.h,
@@ -283,7 +293,28 @@ class Homepage extends StatelessWidget {
                               width: 60.w,
                               child: Row(
                                 children: [
-                                  const Icon(Icons.favorite_border),
+                                  InkWell(
+                                    onTap: () {
+                                      if (!freeBeatController
+                                          .freeBeats[index].isFav!) {
+                                        freeBeatController
+                                            .freeBeats[index].isFav = true;
+                                        freeBeatController.addToFavourite(
+                                            index: index,
+                                            id: freeBeatController
+                                                .freeBeats[index].id!);
+                                      }
+                                    },
+                                    child: Icon(
+                                        !freeBeatController
+                                                .freeBeats[index].isFav!
+                                            ? Icons.favorite_border
+                                            : Icons.favorite,
+                                        color: freeBeatController
+                                                .freeBeats[index].isFav!
+                                            ? Colors.red
+                                            : null),
+                                  ),
                                   SizedBox(width: 8.w),
                                   const Icon(Iconsax.menu)
                                 ],
@@ -318,7 +349,8 @@ class Homepage extends StatelessWidget {
                       separatorBuilder: (context, index) => SizedBox(
                             height: 10.h,
                           ),
-                      itemCount: freeBeatController.freeBeats.length))
+                      itemCount: freeBeatController.freeBeats.length)),
+              SizedBox(height: 15.h),
             ],
           ),
         ),
