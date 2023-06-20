@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/instance_manager.dart';
+import 'package:nepalihiphub/controller/splash_screen_controller.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -10,6 +12,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
+    Get.put(SplashScreenController());
     return Scaffold(
       body: Column(
         children: [
