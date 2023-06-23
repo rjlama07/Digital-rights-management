@@ -32,6 +32,7 @@ class FreeBeatController extends GetxController {
       update();
     } catch (e) {
       freeBeats[index].isFav = false;
+      update();
       debugPrint(e.toString());
       Get.showSnackbar(const GetSnackBar(
         title: "Oops",
@@ -42,6 +43,12 @@ class FreeBeatController extends GetxController {
 
   RxBool isLoading = false.obs;
   RxList<BeatModel> freeBeats = RxList.empty();
+
+  void changeListFav(int index) {
+    freeBeats[index].isFav = true;
+    update();
+  }
+
   Future<void> getFreebeat() async {
     isLoading.value = true;
     final response = await BeatServices().getFreeBeats(getBeat);

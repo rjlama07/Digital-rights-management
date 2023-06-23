@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:nepalihiphub/constant/app_colors.dart';
 import 'package:nepalihiphub/controller/nav_bar_controller.dart';
@@ -293,28 +294,49 @@ class Homepage extends StatelessWidget {
                               width: 60.w,
                               child: Row(
                                 children: [
-                                  InkWell(
-                                    onTap: () {
+                                  InkWell(onTap: () {
+                                    Box box = Hive.box("localData");
+                                    bool isLoggedIn = box.get("isLoggedIn");
+                                    if (isLoggedIn) {
                                       if (!freeBeatController
                                           .freeBeats[index].isFav!) {
                                         freeBeatController
                                             .freeBeats[index].isFav = true;
+                                        freeBeatController.changeListFav(index);
                                         freeBeatController.addToFavourite(
-                                            index: index,
                                             id: freeBeatController
-                                                .freeBeats[index].id!);
+                                                .freeBeats[index].id!,
+                                            index: index);
                                       }
-                                    },
-                                    child: Icon(
-                                        !freeBeatController
-                                                .freeBeats[index].isFav!
-                                            ? Icons.favorite_border
-                                            : Icons.favorite,
-                                        color: freeBeatController
-                                                .freeBeats[index].isFav!
-                                            ? Colors.red
-                                            : null),
-                                  ),
+                                    } else {
+                                      Get.dialog(AlertDialog(
+                                        title: const Text("Login"),
+                                        content: const Text(
+                                            "You need to login to add this to favourite"),
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () {
+                                                Get.back();
+                                              },
+                                              child: const Text("Cancel")),
+                                          TextButton(
+                                              onPressed: () {
+                                                musicController
+                                                    .selectedIndex.value = 2;
+                                                Get.back();
+                                              },
+                                              child: const Text("Login"))
+                                        ],
+                                      ));
+                                    }
+                                  }, child: GetBuilder<FreeBeatController>(
+                                      builder: (context) {
+                                    return freeBeatController
+                                            .freeBeats[index].isFav!
+                                        ? const Icon(Icons.favorite,
+                                            color: Colors.red)
+                                        : const Icon(Icons.favorite_border);
+                                  })),
                                   SizedBox(width: 8.w),
                                   const Icon(Iconsax.menu)
                                 ],
@@ -357,22 +379,4 @@ class Homepage extends StatelessWidget {
       ),
     ));
   }
-}
-
-class FakeMusic {
-  String music;
-  String artist;
-  String view;
-  String imageUrl;
-  FakeMusic(
-      {required this.music,
-      required this.artist,
-      required this.view,
-      required this.imageUrl});
-}
-
-class FakeProducer {
-  String name;
-  String imageUrl;
-  FakeProducer({required this.name, required this.imageUrl});
 }
