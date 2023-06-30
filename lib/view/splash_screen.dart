@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/instance_manager.dart';
 import 'package:nepalihiphub/controller/splash_screen_controller.dart';
 
@@ -18,9 +19,9 @@ class _SplashScreenState extends State<SplashScreen> {
         children: [
           const Spacer(),
           Center(
-            child: Image.asset(
-              "assets/images/logo.png",
-              height: 150,
+            child: CircleAvatar(
+              radius: 100.w,
+              backgroundImage: const AssetImage("assets/images/logo.jpeg"),
             ),
           ),
           const Spacer(),

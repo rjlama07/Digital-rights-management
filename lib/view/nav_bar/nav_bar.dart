@@ -1,6 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:nepalihiphub/constant/app_colors.dart';
 import 'package:nepalihiphub/controller/nav_bar_controller.dart';
 import 'package:nepalihiphub/view/nav_bar/music_bottom_sheet.dart';
@@ -26,27 +27,55 @@ class NavBar extends StatelessWidget {
       body: Obx(() => IndexedStack(
           index: controller.selectedIndex.value, children: controller.pages)),
       bottomNavigationBar: Container(
-          color: Colors.black,
-          padding: const EdgeInsets.only(bottom: 10),
-          child: Obx(
-            () => BottomNavigationBar(
-                currentIndex: controller.selectedIndex.value,
-                onTap: (value) {
-                  controller.selectedIndex.value = value;
-                },
-                selectedItemColor: Colors.red,
-                unselectedItemColor: Colors.grey.withOpacity(0.4),
-                backgroundColor: secondaryBackgroundColor,
-                items: const [
-                  BottomNavigationBarItem(
-                      label: "Home", icon: Icon(Icons.home)),
-                  BottomNavigationBarItem(
-                      label: "Beats", icon: Icon(Icons.music_note)),
-                  BottomNavigationBarItem(
-                      label: "Profile",
-                      icon: Icon(Icons.account_circle_rounded)),
-                ]),
-          )),
+        color: Colors.black,
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+        // child: Obx(
+        //   () => BottomNavigationBar(
+        //       currentIndex: controller.selectedIndex.value,
+        //       onTap: (value) {
+        //         controller.selectedIndex.value = value;
+        //       },
+        //       selectedItemColor: Colors.red,
+        //       unselectedItemColor: Colors.grey.withOpacity(0.4),
+        //       backgroundColor: secondaryBackgroundColor,
+        //       items: const [
+        //         BottomNavigationBarItem(
+        //             label: "Home", icon: Icon(Icons.home)),
+        //         BottomNavigationBarItem(
+        //             label: "Beats", icon: Icon(Icons.music_note)),
+        //         BottomNavigationBarItem(
+        //             label: "Profile",
+        //             icon: Icon(Icons.account_circle_rounded)),
+        //       ]),
+        // )
+        child: GNav(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            duration:
+                const Duration(milliseconds: 100), // tab animation duration
+            gap: 8, // the tab button gap between icon and text
+            color: Colors.grey[800], // unselected icon color
+            activeColor: Colors.red, // selected icon and text color
+            iconSize: 24, // tab button icon size
+            tabBackgroundColor: Colors.white,
+            tabs: const [
+              GButton(
+                icon: Icons.home,
+                text: 'Home',
+              ),
+              GButton(
+                icon: Icons.music_note,
+                text: 'Beats',
+              ),
+              GButton(
+                icon: Icons.account_circle_rounded,
+                text: 'Profile',
+              ),
+            ],
+            selectedIndex: controller.selectedIndex.value,
+            onTabChange: (index) {
+              controller.selectedIndex.value = index;
+            }),
+      ),
     );
   }
 }
