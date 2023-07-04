@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 import 'package:hive_flutter/adapters.dart';
 import 'package:nepalihiphub/services/auth_service.dart';
-import 'package:nepalihiphub/view/home_page.dart';
+
 import 'package:nepalihiphub/view/login/login.dart';
 import 'package:nepalihiphub/view/nav_bar/nav_bar.dart';
 

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:khalti_flutter/khalti_flutter.dart';
 
 import 'package:nepalihiphub/controller/paid_beat_controller.dart';
+import 'package:nepalihiphub/model/beat_model.dart';
 import 'package:nepalihiphub/view/free_beats/widget/player.dart';
 
 class PaidBeats extends StatelessWidget {
@@ -9,6 +11,37 @@ class PaidBeats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void payWithKhaltiApp(PaidBeatModel paidBeatModel) {
+      KhaltiScope.of(context).pay(
+        preferences: [PaymentPreference.khalti],
+        config: PaymentConfig(
+            amount: (int.parse(paidBeatModel.price.toString())) * 100,
+            productIdentity: "beat",
+            productName: paidBeatModel.beatName.toString()),
+        onSuccess: (value) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                content: const Text("Payment Sucessfull"),
+                actions: [
+                  SimpleDialogOption(
+                    child: const Text("Ok"),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  )
+                ],
+              );
+            },
+          );
+        },
+        onFailure: (value) {
+          debugPrint(value.toString());
+        },
+      );
+    }
+
     final controller = Get.put(PaidBeatController());
     return Scaffold(
         backgroundColor: Colors.grey[200],
@@ -104,15 +137,22 @@ class PaidBeats extends StatelessWidget {
                               const SizedBox(height: 10),
                               Align(
                                 alignment: Alignment.bottomRight,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.blue,
-                                      borderRadius: BorderRadius.circular(8)),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12, vertical: 12),
-                                  child: const Text(
-                                    "Buy now",
-                                    style: TextStyle(color: Colors.white),
+                                child: InkWell(
+                                  onTap: () {
+                                    payWithKhaltiApp(
+                                        controller.paidBeats[index]);
+                                    // Get.to(const PaymentPage());
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: Colors.blue,
+                                        borderRadius: BorderRadius.circular(8)),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12, vertical: 12),
+                                    child: const Text(
+                                      "Buy now",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
                                   ),
                                 ),
                               )

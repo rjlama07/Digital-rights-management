@@ -6,16 +6,16 @@ import 'package:nepalihiphub/view/login/login.dart';
 
 class SignUp extends StatelessWidget {
   const SignUp({super.key});
+  static final formKey = GlobalKey<FormState>();
+  static final controller = Get.find<AuthController>();
+  static final firstNameController = TextEditingController();
+  static final lastNameController = TextEditingController();
+  static final emailController = TextEditingController();
+  static final passwordController = TextEditingController();
+  static final confirmPassswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<AuthController>();
-    final firstNameController = TextEditingController();
-    final lastNameController = TextEditingController();
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
-    final confirmPassswordController = TextEditingController();
-    final formKey = GlobalKey<FormState>();
     return Scaffold(
         body: SafeArea(
       child: Form(

@@ -1,9 +1,9 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:nepalihiphub/model/beat_model.dart';
 
 class PlayerAudio extends StatefulWidget {
-  const PlayerAudio({super.key, required this.beatUrl});
+  const PlayerAudio({Key? key, required this.beatUrl}) : super(key: key);
+
   final String beatUrl;
 
   @override
@@ -15,31 +15,46 @@ class _PlayerAudioState extends State<PlayerAudio> {
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
   bool isPlaying = false;
+  bool disposed = false;
 
   @override
   void initState() {
+    super.initState();
+
     audioPlayer.onPlayerStateChanged.listen((event) {
-      setState(() {
-        isPlaying = event == PlayerState.playing;
-      });
+      if (!disposed) {
+        setState(() {
+          isPlaying = event == PlayerState.playing;
+        });
+      }
     });
 
     audioPlayer.onDurationChanged.listen((event) {
-      setState(() {
-        duration = event;
-      });
+      if (!disposed) {
+        setState(() {
+          duration = event;
+        });
+      }
     });
 
     audioPlayer.onPositionChanged.listen((event) {
-      setState(() {
-        position = event;
-      });
+      if (!disposed) {
+        setState(() {
+          position = event;
+        });
+      }
     });
-    super.initState();
+
+    // _initAudioPlayer();
   }
+
+  // void _initAudioPlayer() async {
+  //   await audioPlayer.play(UrlSource(widget.beatUrl));
+  // }
 
   @override
   void dispose() {
+    disposed = true;
     audioPlayer.dispose();
     super.dispose();
   }
@@ -70,12 +85,14 @@ class _PlayerAudioState extends State<PlayerAudio> {
           onTap: () async {
             if (isPlaying) {
               audioPlayer.pause();
-              isPlaying = !isPlaying;
+              isPlaying = false;
             } else {
               await audioPlayer.play(UrlSource(widget.beatUrl));
-              isPlaying = !isPlaying;
+              isPlaying = true;
             }
-            setState(() {});
+            if (!disposed) {
+              setState(() {});
+            }
           },
           child: Center(
             child: CircleAvatar(

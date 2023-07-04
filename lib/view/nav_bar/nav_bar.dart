@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nepalihiphub/constant/app_colors.dart';
 import 'package:nepalihiphub/controller/nav_bar_controller.dart';
 
 class NavBar extends StatelessWidget {
@@ -13,15 +14,16 @@ class NavBar extends StatelessWidget {
           index: controller.selectedIndex.value, children: controller.pages)),
       bottomNavigationBar: Container(
           color: Colors.black,
-          padding: const EdgeInsets.symmetric(vertical: 12),
+          padding: const EdgeInsets.only(bottom: 10),
           child: Obx(
             () => BottomNavigationBar(
                 currentIndex: controller.selectedIndex.value,
                 onTap: (value) {
                   controller.selectedIndex.value = value;
                 },
+                selectedItemColor: Colors.blue,
                 unselectedItemColor: Colors.white,
-                backgroundColor: Colors.black,
+                backgroundColor: secondaryBackgroundColor,
                 items: const [
                   BottomNavigationBarItem(
                       label: "Home", icon: Icon(Icons.home)),

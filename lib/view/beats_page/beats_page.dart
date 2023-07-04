@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
+import 'package:nepalihiphub/view/book_studio/book_studio.dart';
 import 'package:nepalihiphub/view/free_beats/free_beats.dart';
+import 'package:nepalihiphub/view/producer_view/producer_view.dart';
 
 import '../paid_beats/paid_beats.dart';
 
@@ -44,6 +46,28 @@ class BeatPage extends StatelessWidget {
                     subTitle: "Buy latest Beats",
                     url:
                         "https://img.freepik.com/premium-vector/hand-holding-money-cartoon-illustration_525134-61.jpg?w=2000"),
+              ),
+              const SizedBox(height: 10),
+              InkWell(
+                onTap: () {
+                  Get.to(const BookStudioPage());
+                },
+                child: buildContainer(
+                    title: "Book studio",
+                    subTitle: "Book studio near you",
+                    url:
+                        "https://img.freepik.com/premium-vector/hand-holding-money-cartoon-illustration_525134-61.jpg?w=2000"),
+              ),
+              const SizedBox(height: 10),
+              InkWell(
+                onTap: () {
+                  Get.to(const ProducerView());
+                },
+                child: buildContainer(
+                    title: "Custom Beats",
+                    subTitle: "order custom beats",
+                    url:
+                        "https://i.toneden.io/unsafe/full-fit-in/1684x944/filters:no_upscale()/https%3A%2F%2Far.toneden.io%2F38032909%2Funlocks%2Ftemp999130%3Fcache%3D1593786394927"),
               )
             ],
           ),
@@ -71,7 +95,7 @@ Container buildContainer({
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               image:
-                  DecorationImage(fit: BoxFit.fill, image: NetworkImage(url))),
+                  DecorationImage(fit: BoxFit.cover, image: NetworkImage(url))),
         ),
         const SizedBox(width: 20),
         Column(

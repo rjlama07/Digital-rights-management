@@ -30,7 +30,6 @@ class BeatServices {
     } on DioException catch (e) {
       return right("Something went wrong:$e");
     } catch (e) {
-      print(e);
       return right("Something went wrong");
     }
   }

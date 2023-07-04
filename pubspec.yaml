@@ -35,17 +35,20 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   get: ^4.6.5
-  flutter_screenutil: ^5.7.0
+  flutter_screenutil: ^5.8.4
   dio: ^5.2.1
   dartz: ^0.10.1
   hive_flutter: ^1.1.0
   audioplayers: ^4.1.0
   audio_video_progress_bar: ^1.0.1
+  khalti_flutter: ^2.2.1
+  iconsax: ^0.0.8
+  
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+ 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
@@ -65,6 +68,31 @@ flutter:
 
   assets:
     - assets/images/
+
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Outfit/Outfit-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/Outfit/Outfit-ExtraLight.ttf
+          weight: 200  
+        - asset: assets/fonts/Outfit/Outfit-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Outfit/Outfit-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Outfit/Outfit-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Outfit/Outfit-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Outfit/Outfit-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Outfit/Outfit-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/Outfit/Outfit-Black.ttf
+          weight: 900
+
+
+          
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
