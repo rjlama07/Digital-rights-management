@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:nepalihiphub/constant/api.dart';
 
 class AuthServices {
@@ -14,7 +15,8 @@ class AuthServices {
       "password": password,
     };
     try {
-      await dio.post(signUpUrl, data: body);
+      final response = await dio.post(signUpUrl, data: body);
+      Hive.box("localData").put("accessToken", response.data["accessToken"]);
       return left(true);
     } on DioException catch (e) {
       return right(e.response!.data["error"]);
@@ -27,7 +29,8 @@ class AuthServices {
       "password": password,
     };
     try {
-      await dio.post(loginUrl, data: body);
+      final response = await dio.post(loginUrl, data: body);
+      Hive.box("localData").put("accessToken", response.data["accessToken"]);
       return left(true);
     } on DioException catch (e) {
       return right(e.response!.data["error"]);

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:khalti_flutter/khalti_flutter.dart';
@@ -34,7 +33,10 @@ class MyApp extends StatelessWidget {
                   title: 'Flutter Demo',
                   darkTheme: ThemeData.dark().copyWith(
                       inputDecorationTheme: InputDecorationTheme(
+                          focusedBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.red)),
                           hintStyle: darkTextTheme.labelMedium,
+                          labelStyle: darkTextTheme.labelMedium,
                           iconColor: white,
                           prefixIconColor: white),
                       scaffoldBackgroundColor: backgroundColor,

@@ -10,6 +10,8 @@ class FreeBeatController extends GetxController {
     getFreebeat();
   }
 
+  RxString downlaodState = "Download now".obs;
+
   RxBool isLoading = false.obs;
   RxList<BeatModel> freeBeats = RxList.empty();
   Future<void> getFreebeat() async {

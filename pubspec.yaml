@@ -43,6 +43,7 @@ dependencies:
   audio_video_progress_bar: ^1.0.1
   khalti_flutter: ^2.2.1
   iconsax: ^0.0.8
+  flutter_file_downloader: ^1.1.2
   
 
 dev_dependencies:

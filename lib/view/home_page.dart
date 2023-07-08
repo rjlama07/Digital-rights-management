@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:nepalihiphub/constant/app_colors.dart';
+import 'package:nepalihiphub/controller/nav_bar_controller.dart';
+import 'package:nepalihiphub/model/beat_model.dart';
+
+import 'package:nepalihiphub/view/producer_view/producer_profile.dart';
+import 'package:nepalihiphub/view/producer_view/producer_view.dart';
 import 'package:nepalihiphub/widget/tredning_song.dart';
 
+import '../controller/free_beat_controller.dart';
 import '../controller/producer_profile_controller.dart';
 
 class Homepage extends StatelessWidget {
@@ -15,6 +23,8 @@ class Homepage extends StatelessWidget {
     // bool isLoggedIn = box.get("isLoggedin") ?? false;
     // final controller = Get.put(HomepageContoller());
     final controller = Get.put(ProducerProfileController());
+    final freeBeatController = Get.put(FreeBeatController());
+    final musicController = Get.put(NavBarController());
 
     Widget headingText(String text) {
       return Text(text, style: Theme.of(context).textTheme.titleLarge);
@@ -25,149 +35,292 @@ class Homepage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           headingText(text),
-          Icon(
-            Icons.arrow_forward_ios_outlined,
-            size: 18.h,
+          InkWell(
+            onTap: () => ontap(),
+            child: Icon(
+              Icons.arrow_forward_ios_outlined,
+              size: 18.h,
+            ),
           )
         ],
       );
     }
 
-    List<FakeProducer> fakeProducer = [
-      FakeProducer(
-        name: "Oozai",
-        imageUrl:
-            "https://instagram.fktm3-1.fna.fbcdn.net/v/t51.2885-15/319069792_838860200722746_4188244303298702076_n.webp?stp=dst-jpg_e35&_nc_ht=instagram.fktm3-1.fna.fbcdn.net&_nc_cat=106&_nc_ohc=NoTfJfKw1wsAX8rLAc1&edm=ACWDqb8BAAAA&ccb=7-5&ig_cache_key=Mjk5MTY5NDE2MjgwNjYyODk0MQ%3D%3D.2-ccb7-5&oh=00_AfAck76_Wwv4D8lgEiaIZ8779J7De4yMX9BEcTBx2kM3Gg&oe=64A8A8C5&_nc_sid=ee9879",
-      ),
-      FakeProducer(
-        name: "Sik Music",
-        imageUrl:
-            "https://i1.sndcdn.com/avatars-2hzc7jNV4yWzmttf-UIzwDA-t240x240.jpg",
-      ),
-      FakeProducer(
-        name: "The 977",
-        imageUrl:
-            "https://i.ytimg.com/vi/XTaETiwCgzo/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGGUgTyhIMA8=&rs=AOn4CLC-Dci2Gjje_NO2BA5eqxqKfd7V9g",
-      )
-    ];
-
-    List<FakeMusic> dummmyMusic = [
-      FakeMusic(
-          music: "Ravana",
-          artist: "Dong",
-          view: "100m Streams",
-          imageUrl:
-              "https://scontent.fktm3-1.fna.fbcdn.net/v/t1.6435-9/176738680_1453450948337103_5132348385065889829_n.jpg?_nc_cat=105&cb=99be929b-59f725be&ccb=1-7&_nc_sid=8bfeb9&_nc_ohc=btj9QrGyLDUAX-5eKZj&_nc_ht=scontent.fktm3-1.fna&oh=00_AfCLS682_S_07wmyHAN69kYqS5HpW40n5KzcJ30qTyam1g&oe=64CBD122"),
-      FakeMusic(
-          music: "Unwritten",
-          artist: "Nasty",
-          view: "10k Streams",
-          imageUrl: "https://i.ytimg.com/vi/drgmR0gUTNA/maxresdefault.jpg"),
-      FakeMusic(
-          music: "Sathi",
-          artist: "Yama Buddha",
-          view: "120m Streams",
-          imageUrl: "https://i.ytimg.com/vi/3UL4FXBl2kA/maxresdefault.jpg")
-    ];
-
     return Scaffold(
-        body: SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(22),
-                color: secondaryBackgroundColor,
-              ),
-              child: Padding(
-                padding: EdgeInsets.zero,
-                child: TextField(
-                  readOnly: true,
-                  decoration: InputDecoration(
-                    hintText: "Search for music",
-                    suffixIcon: Icon(
-                      size: 18.sp,
-                      Icons.mic,
-                      color: Colors.white,
+        body: SingleChildScrollView(
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(22),
+                  color: secondaryBackgroundColor,
+                ),
+                child: Padding(
+                  padding: EdgeInsets.zero,
+                  child: TextField(
+                    readOnly: true,
+                    decoration: InputDecoration(
+                      hintText: "Search for music",
+                      suffixIcon: Icon(
+                        size: 18.sp,
+                        Icons.mic,
+                        color: Colors.white,
+                      ),
+                      prefixIcon: Icon(
+                        Icons.search,
+                        color: white,
+                        size: 18.sp,
+                      ),
+                      border: InputBorder.none,
                     ),
-                    prefixIcon: Icon(
-                      Icons.search,
-                      color: white,
-                      size: 18.sp,
-                    ),
-                    border: InputBorder.none,
                   ),
                 ),
               ),
-            ),
-            SizedBox(height: 15.h),
-            rowHeading(text: "Trending Music", ontap: () {}),
-            SizedBox(height: 15.h),
-            SizedBox(
-              height: 80.h,
-              child: ListView.separated(
-                separatorBuilder: (context, index) => const SizedBox(
-                  width: 10,
-                ),
-                scrollDirection: Axis.horizontal,
-                itemCount: dummmyMusic.length,
-                itemBuilder: (context, index) {
-                  return TrendingMusic(
-                    musicTitle: dummmyMusic[index].music,
-                    musicArtist: dummmyMusic[index].artist,
-                    requiredViews: dummmyMusic[index].view,
-                    imageUrl: dummmyMusic[index].imageUrl,
-                  );
-                },
+              SizedBox(height: 15.h),
+              rowHeading(text: "Trending Music", ontap: () {}),
+              SizedBox(height: 15.h),
+              Obx(
+                () => freeBeatController.isLoading.value
+                    ? const Center(child: CircularProgressIndicator())
+                    : SizedBox(
+                        height: 80.h,
+                        child: ListView.separated(
+                          separatorBuilder: (context, index) => const SizedBox(
+                            width: 10,
+                          ),
+                          scrollDirection: Axis.horizontal,
+                          itemCount: freeBeatController.freeBeats.length,
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                              onTap: () {
+                                BeatModel beatModel =
+                                    freeBeatController.freeBeats[index];
+                                musicController.changeMusic(
+                                    imageUrl: beatModel.imageUrl!,
+                                    name:
+                                        "${beatModel.beatName!}-${beatModel.producerName!}",
+                                    beatUrl: beatModel.beatUrl!);
+                              },
+                              onLongPress: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return Dialog(
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 12, vertical: 12),
+                                        height: 100,
+                                        width: 300,
+                                        child: InkWell(
+                                          onTap: () {
+                                            FileDownloader.downloadFile(
+                                              url: freeBeatController
+                                                  .freeBeats[index].beatUrl!,
+                                              onProgress:
+                                                  (fileName, progress) {},
+                                              onDownloadCompleted: (path) {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return Dialog(
+                                                      child: Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .symmetric(
+                                                                horizontal: 12,
+                                                                vertical: 12),
+                                                        height: 100,
+                                                        width: 300,
+                                                        child: InkWell(
+                                                          onTap: () {
+                                                            FileDownloader
+                                                                .downloadFile(
+                                                              url: freeBeatController
+                                                                  .freeBeats[
+                                                                      index]
+                                                                  .beatUrl!,
+                                                              onProgress:
+                                                                  (fileName,
+                                                                      progress) {},
+                                                              onDownloadCompleted:
+                                                                  (path) {},
+                                                            );
+                                                            Get.back();
+                                                          },
+                                                          child: const Row(
+                                                            children: [
+                                                              Icon(Icons
+                                                                  .download),
+                                                              SizedBox(
+                                                                  width: 20),
+                                                              Text("Download")
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                            );
+                                            Get.back();
+                                          },
+                                          child: const Row(
+                                            children: [
+                                              Icon(Icons.download),
+                                              SizedBox(width: 20),
+                                              Text("Download")
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                              child: TrendingMusic(
+                                musicTitle: freeBeatController
+                                    .freeBeats[index].beatName!,
+                                musicArtist: freeBeatController
+                                    .freeBeats[index].beatName!,
+                                requiredViews: "100m Streams",
+                                imageUrl: freeBeatController
+                                    .freeBeats[index].imageUrl!,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
               ),
-            ),
-            SizedBox(height: 15.h),
-            rowHeading(text: "Trending Artist", ontap: () {}),
-            SizedBox(height: 15.h),
-            SizedBox(
-              height: 170.h,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: fakeProducer.length,
-                separatorBuilder: (context, index) => const SizedBox(width: 10),
-                itemBuilder: (context, index) {
-                  return Container(
-                    decoration: BoxDecoration(
-                        color: secondaryBackgroundColor,
-                        borderRadius: BorderRadius.circular(12)),
-                    child: Column(
-                      children: [
-                        Container(
-                            height: 140.h,
-                            width: 126.w,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    fit: BoxFit.fill,
-                                    image: NetworkImage(
-                                        fakeProducer[index].imageUrl)),
-                                borderRadius: const BorderRadius.only(
-                                  topRight: Radius.circular(8),
-                                  topLeft: Radius.circular(8),
-                                ))),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Center(
-                            child: Text(
-                              fakeProducer[index].name,
-                              style: Theme.of(context).textTheme.bodySmall,
+              SizedBox(height: 15.h),
+              rowHeading(
+                  text: "Trending Producers",
+                  ontap: () {
+                    Get.to(const ProducerView());
+                  }),
+              SizedBox(height: 15.h),
+              Obx(
+                () => controller.isLoading.value
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : SizedBox(
+                        height: 170.h,
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: controller.producers.length > 5
+                              ? 5
+                              : controller.producers.length,
+                          separatorBuilder: (context, index) =>
+                              const SizedBox(width: 10),
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                              onTap: () => Get.to(ProducerProfile(
+                                  producerModel: controller.producers[index])),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: secondaryBackgroundColor,
+                                    borderRadius: BorderRadius.circular(12)),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                        height: 140.h,
+                                        width: 126.w,
+                                        decoration: BoxDecoration(
+                                            color: Colors.black,
+                                            image: DecorationImage(
+                                                fit: BoxFit.fill,
+                                                image: NetworkImage(controller
+                                                    .producers[index]
+                                                    .profileUrl)),
+                                            borderRadius:
+                                                const BorderRadius.only(
+                                              topRight: Radius.circular(8),
+                                              topLeft: Radius.circular(8),
+                                            ))),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(
+                                        child: Text(
+                                          controller.producers[index].name,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+              ),
+              SizedBox(height: 15.h),
+              headingText("Recently Listed"),
+              SizedBox(height: 15.h),
+              Obx(() => freeBeatController.isLoading.value
+                  ? const Center(child: CircularProgressIndicator())
+                  : ListView.separated(
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) => ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            leading: Container(
+                              height: 45.h,
+                              width: 45.w,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  image: DecorationImage(
+                                      image: NetworkImage(freeBeatController
+                                          .freeBeats[index].imageUrl!))),
+                            ),
+                            trailing: SizedBox(
+                              width: 60.w,
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.favorite_border),
+                                  SizedBox(width: 8.w),
+                                  const Icon(Iconsax.menu)
+                                ],
+                              ),
+                            ),
+                            title: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  freeBeatController.freeBeats[index].beatName!,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall!
+                                      .copyWith(
+                                          fontSize: 14.sp,
+                                          fontWeight: FontWeight.w500),
+                                ),
+                                SizedBox(height: 2.h),
+                                Text(
+                                  freeBeatController
+                                      .freeBeats[index].producerName!,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall!
+                                      .copyWith(
+                                          fontSize: 12.sp,
+                                          fontWeight: FontWeight.w500),
+                                )
+                              ],
                             ),
                           ),
-                        )
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
+                      separatorBuilder: (context, index) => SizedBox(
+                            height: 10.h,
+                          ),
+                      itemCount: freeBeatController.freeBeats.length))
+            ],
+          ),
         ),
       ),
     ));

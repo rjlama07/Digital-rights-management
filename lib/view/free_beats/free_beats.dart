@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:get/get.dart';
 import 'package:nepalihiphub/controller/free_beat_controller.dart';
 import 'package:nepalihiphub/view/free_beats/widget/player.dart';
@@ -8,7 +9,7 @@ class Freebeats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(FreeBeatController());
+    final controller = Get.find<FreeBeatController>();
     return Scaffold(
         backgroundColor: Colors.grey[200],
         body: Obx(
@@ -32,6 +33,7 @@ class Freebeats extends StatelessWidget {
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(22)),
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
                                 children: [
@@ -74,7 +76,12 @@ class Freebeats extends StatelessWidget {
                               const SizedBox(height: 10),
                               PlayerAudio(
                                 beatUrl: controller.freeBeats[index].beatUrl!,
-                              )
+                              ),
+                              const SizedBox(height: 10),
+                              DownlaodButton(
+                                freeBeatController: controller,
+                                url: controller.freeBeats[index].beatUrl!,
+                              ),
                             ],
                           ),
                         ),
@@ -83,5 +90,38 @@ class Freebeats extends StatelessWidget {
                   ),
                 ),
         ));
+  }
+}
+
+class DownlaodButton extends StatefulWidget {
+  const DownlaodButton(
+      {super.key, required this.freeBeatController, required this.url});
+  final FreeBeatController freeBeatController;
+  final String url;
+
+  @override
+  State<DownlaodButton> createState() => _DownlaodButtonState();
+}
+
+class _DownlaodButtonState extends State<DownlaodButton> {
+  String downloadState = "Download now";
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+        onPressed: () {
+          FileDownloader.downloadFile(
+            url: widget.url,
+            onProgress: (fileName, progress) {
+              downloadState = "Downlaoding $progress%";
+              setState(() {});
+            },
+            onDownloadCompleted: (path) {
+              print(path);
+              downloadState = "Downloaded";
+              setState(() {});
+            },
+          );
+        },
+        child: Text(downloadState));
   }
 }

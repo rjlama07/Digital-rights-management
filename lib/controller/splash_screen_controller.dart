@@ -1,6 +1,5 @@
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/route_manager.dart';
-
 import 'package:nepalihiphub/view/nav_bar/nav_bar.dart';
 
 class SplashScreenController extends GetxController {
@@ -8,7 +7,7 @@ class SplashScreenController extends GetxController {
   void onInit() {
     super.onInit();
     Future.delayed(const Duration(seconds: 2), () {
-      Get.to(const NavBar());
+      Get.off(const NavBar());
     });
   }
 }

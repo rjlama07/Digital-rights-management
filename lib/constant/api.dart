@@ -6,3 +6,4 @@ String getBeat = "${baseURl}upload/getBeats";
 String getPaidBeatUrl = "${baseURl}upload/getPaidBeats";
 String getStudiosUrl = "${baseURl}upload/getStudio";
 String getProducersUrl = "${baseURl}producer/getProducers";
+String getUserProfile = "${baseURl}user/getUserInfo";
