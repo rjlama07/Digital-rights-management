@@ -42,4 +42,28 @@ class BeatServices {
       return right("Something went wrong");
     }
   }
+
+  Future<Either<List<BeatModel>, String>> searchBeat(
+      String queryParameter) async {
+    String accessToken = box.get("accessToken") ?? "";
+    final headers = {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'Charset': 'utf-8',
+      'authorization': 'Bearer $accessToken'
+    };
+    try {
+      final response = await dio.get(searchBeatUrl,
+          queryParameters: {"search": queryParameter},
+          options: Options(headers: headers));
+      List<BeatModel> beat = (response.data["beats"] as List)
+          .map((e) => BeatModel.fromJson(e))
+          .toList();
+
+      return left(beat);
+    } on DioException catch (e) {
+      return right("Something went wrong:$e");
+    } catch (e) {
+      return right("Something went wrong");
+    }
+  }
 }

@@ -10,6 +10,7 @@ import 'package:nepalihiphub/model/beat_model.dart';
 
 import 'package:nepalihiphub/view/producer_view/producer_profile.dart';
 import 'package:nepalihiphub/view/producer_view/producer_view.dart';
+import 'package:nepalihiphub/view/search/search_page.dart';
 import 'package:nepalihiphub/widget/tredning_song.dart';
 
 import '../controller/free_beat_controller.dart';
@@ -60,28 +61,34 @@ class Homepage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(22),
-                    color: secondaryBackgroundColor,
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.zero,
-                    child: TextField(
-                      readOnly: true,
-                      decoration: InputDecoration(
-                        hintText: "Search for music",
-                        suffixIcon: Icon(
-                          size: 18.sp,
-                          Icons.mic,
-                          color: Colors.white,
+                InkWell(
+                  onTap: () => Get.to(const SearchPage()),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(22),
+                      color: secondaryBackgroundColor,
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.zero,
+                      child: TextField(
+                        onTap: () {
+                             Get.to(const SearchPage());
+                        },
+                        readOnly: true,
+                        decoration: InputDecoration(
+                          hintText: "Search for music",
+                          suffixIcon: Icon(
+                            size: 18.sp,
+                            Icons.mic,
+                            color: Colors.white,
+                          ),
+                          prefixIcon: Icon(
+                            Icons.search,
+                            color: white,
+                            size: 18.sp,
+                          ),
+                          border: InputBorder.none,
                         ),
-                        prefixIcon: Icon(
-                          Icons.search,
-                          color: white,
-                          size: 18.sp,
-                        ),
-                        border: InputBorder.none,
                       ),
                     ),
                   ),

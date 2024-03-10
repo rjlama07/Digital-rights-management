@@ -16,7 +16,7 @@ class _StudioInfoState extends State<StudioInfo> {
     buildText(
         {required String text,
         double size = 15,
-        Color color = Colors.black,
+        Color color = Colors.white,
         FontWeight fontWeight = FontWeight.bold}) {
       return Text(
         text,

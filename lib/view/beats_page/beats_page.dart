@@ -12,7 +12,7 @@ class BeatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 22),
@@ -24,7 +24,7 @@ class BeatPage extends StatelessWidget {
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
-                    color: Color.fromRGBO(37, 76, 104, 1)),
+                    ),
               ),
               const SizedBox(height: 20),
               InkWell(
@@ -84,7 +84,7 @@ Container buildContainer({
 }) {
   return Container(
     decoration: BoxDecoration(
-        color: Colors.white, borderRadius: BorderRadius.circular(22)),
+        color: Colors.brown, borderRadius: BorderRadius.circular(22)),
     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,

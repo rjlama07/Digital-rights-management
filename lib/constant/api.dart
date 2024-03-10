@@ -1,5 +1,5 @@
-// String baseURl = "http://192.168.10.99:3000/";
-String baseURl = "https://drm-8gc9.onrender.com/";
+String baseURl = "http://192.168.1.66:3000/";
+// String baseURl = "https://drm-8gc9.onrender.com/";
 String loginUrl = "${baseURl}user/login";
 String signUpUrl = "${baseURl}user/signup";
 String getBeat = "${baseURl}upload/getBeats";
@@ -12,3 +12,4 @@ String uploadProfileImage = "${baseURl}upload/changeProfileImage";
 String getFavouriteBeats = "${baseURl}favourite/getFavouriteBeat";
 String addtoFavouriteUrl = "${baseURl}favourite/addToFavourites";
 String updatePassword = "${baseURl}user/updatePassword";
+String searchBeatUrl = "${baseURl}upload/searchBeat";
