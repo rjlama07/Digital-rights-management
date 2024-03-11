@@ -4,7 +4,7 @@ import 'package:get/get_instance/get_instance.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:nepalihiphub/controller/producer_profile_controller.dart';
-import 'package:nepalihiphub/view/producer_view/producer_profile.dart';
+import 'package:nepalihiphub/view/producer_view/artist_profile.dart';
 
 class ProducerView extends StatelessWidget {
   const ProducerView({super.key});
@@ -47,9 +47,9 @@ class ProducerView extends StatelessWidget {
                               itemBuilder: (context, index) {
                                 return InkWell(
                                   onTap: () {
-                                    Get.to(ProducerProfile(
-                                        producerModel:
-                                            controller.producers[index]));
+                                    // Get.to(ArtistProfile(
+                                    //     producerModel:
+                                    //         controller.producers[index]));
                                   },
                                   child: Column(
                                     crossAxisAlignment:

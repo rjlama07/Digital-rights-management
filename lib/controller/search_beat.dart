@@ -1,11 +1,12 @@
 import 'package:get/get.dart';
 
-import 'package:nepalihiphub/model/beat_model.dart';
+import 'package:nepalihiphub/model/search_model.dart';
+
 import 'package:nepalihiphub/services/beats_services.dart';
 
 class SearchBeatController extends GetxController {
   BeatServices beatServices = BeatServices();
-  RxList<BeatModel> beatModel = RxList.empty();
+  SearchModel searchResult = SearchModel(artist: [], song: []);
   RxBool isLoading = false.obs;
   RxBool haveSearched = false.obs;
 
@@ -15,7 +16,8 @@ class SearchBeatController extends GetxController {
     final response = await beatServices.searchBeat(queryParameter);
     isLoading.value = false;
     response.fold((l) {
-      beatModel.assignAll(l);
+      searchResult = l;
+      update();
     }, (r) {});
   }
 }

@@ -8,13 +8,13 @@ import 'package:nepalihiphub/constant/app_colors.dart';
 import 'package:nepalihiphub/controller/nav_bar_controller.dart';
 import 'package:nepalihiphub/model/beat_model.dart';
 
-import 'package:nepalihiphub/view/producer_view/producer_profile.dart';
+import 'package:nepalihiphub/view/producer_view/artist_profile.dart';
 import 'package:nepalihiphub/view/producer_view/producer_view.dart';
 import 'package:nepalihiphub/view/search/search_page.dart';
 import 'package:nepalihiphub/widget/tredning_song.dart';
 
-import '../controller/free_beat_controller.dart';
-import '../controller/producer_profile_controller.dart';
+import '../../controller/free_beat_controller.dart';
+import '../../controller/producer_profile_controller.dart';
 
 class Homepage extends StatelessWidget {
   const Homepage({super.key});
@@ -52,7 +52,7 @@ class Homepage extends StatelessWidget {
         body: RefreshIndicator(
       onRefresh: () async {
         freeBeatController.getFreebeat();
-        controller.getProducers();
+        controller.getArtist();
       },
       child: SingleChildScrollView(
         child: SafeArea(
@@ -72,7 +72,10 @@ class Homepage extends StatelessWidget {
                       padding: EdgeInsets.zero,
                       child: TextField(
                         onTap: () {
-                             Get.to(const SearchPage());
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => const SearchPage()));
                         },
                         readOnly: true,
                         decoration: InputDecoration(
@@ -144,7 +147,7 @@ class Homepage extends StatelessWidget {
                                                         child: Container(
                                                           padding:
                                                               const EdgeInsets
-                                                                      .symmetric(
+                                                                  .symmetric(
                                                                   horizontal:
                                                                       12,
                                                                   vertical: 12),
@@ -227,16 +230,19 @@ class Homepage extends StatelessWidget {
                           height: 170.h,
                           child: ListView.separated(
                             scrollDirection: Axis.horizontal,
-                            itemCount: controller.producers.length > 5
+                            itemCount: controller.artist.length > 5
                                 ? 5
-                                : controller.producers.length,
+                                : controller.artist.length,
                             separatorBuilder: (context, index) =>
                                 const SizedBox(width: 10),
                             itemBuilder: (context, index) {
                               return InkWell(
-                                onTap: () => Get.to(ProducerProfile(
-                                    producerModel:
-                                        controller.producers[index])),
+                                onTap: () => Navigator.of(context)
+                                    .push(MaterialPageRoute(
+                                  builder: (context) =>  ArtistProfile(
+                                    artistModel: controller.artist[index],
+                                  ),
+                                )),
                                 child: Container(
                                   decoration: BoxDecoration(
                                       color: secondaryBackgroundColor,
@@ -251,7 +257,7 @@ class Homepage extends StatelessWidget {
                                               image: DecorationImage(
                                                   fit: BoxFit.fill,
                                                   image: NetworkImage(controller
-                                                      .producers[index]
+                                                      .artist[index]
                                                       .profileUrl)),
                                               borderRadius:
                                                   const BorderRadius.only(
@@ -262,7 +268,7 @@ class Homepage extends StatelessWidget {
                                         padding: const EdgeInsets.all(8.0),
                                         child: Center(
                                           child: Text(
-                                            controller.producers[index].name,
+                                            controller.artist[index].name,
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodySmall,

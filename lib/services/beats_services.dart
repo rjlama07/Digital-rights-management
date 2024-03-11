@@ -3,6 +3,8 @@ import 'package:dio/dio.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:nepalihiphub/constant/api.dart';
 import 'package:nepalihiphub/model/beat_model.dart';
+import 'package:nepalihiphub/model/search_model.dart';
+import 'package:nepalihiphub/model/song_model.dart';
 
 class BeatServices {
   final dio = Dio();
@@ -43,7 +45,10 @@ class BeatServices {
     }
   }
 
-  Future<Either<List<BeatModel>, String>> searchBeat(
+
+  
+
+  Future<Either<SearchModel, String>> searchBeat(
       String queryParameter) async {
     String accessToken = box.get("accessToken") ?? "";
     final headers = {
@@ -55,11 +60,9 @@ class BeatServices {
       final response = await dio.get(searchBeatUrl,
           queryParameters: {"search": queryParameter},
           options: Options(headers: headers));
-      List<BeatModel> beat = (response.data["beats"] as List)
-          .map((e) => BeatModel.fromJson(e))
-          .toList();
+      SearchModel searchModel = SearchModel.fromJson(response.data);
 
-      return left(beat);
+      return left(searchModel);
     } on DioException catch (e) {
       return right("Something went wrong:$e");
     } catch (e) {

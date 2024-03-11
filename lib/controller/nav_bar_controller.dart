@@ -2,7 +2,8 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/state_manager.dart';
 import 'package:nepalihiphub/view/beats_page/beats_page.dart';
-import 'package:nepalihiphub/view/home_page.dart';
+import 'package:nepalihiphub/view/home_page/home_navigator.dart';
+import 'package:nepalihiphub/view/home_page/home_page.dart';
 import 'package:nepalihiphub/view/profile/profile_navigator.dart';
 
 class NavBarController extends GetxController {
@@ -47,5 +48,5 @@ class NavBarController extends GetxController {
     update();
   }
 
-  List<Widget> pages = const [Homepage(), BeatPage(), ProfileNavigator()];
+  List<Widget> pages = const [HomeNavigator(), BeatPage(), ProfileNavigator()];
 }

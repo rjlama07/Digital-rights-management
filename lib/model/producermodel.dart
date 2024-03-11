@@ -6,6 +6,7 @@ class ProducerModel {
   String averageDeliveryTime;
   String genre;
   Map<String, dynamic> package;
+  
 
   ProducerModel(
       {required this.name,

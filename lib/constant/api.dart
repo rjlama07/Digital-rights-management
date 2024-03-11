@@ -12,4 +12,9 @@ String uploadProfileImage = "${baseURl}upload/changeProfileImage";
 String getFavouriteBeats = "${baseURl}favourite/getFavouriteBeat";
 String addtoFavouriteUrl = "${baseURl}favourite/addToFavourites";
 String updatePassword = "${baseURl}user/updatePassword";
-String searchBeatUrl = "${baseURl}upload/searchBeat";
+String searchBeatUrl = "${baseURl}song/searchSong";
+String getArtistUrl = "${baseURl}artist/getArtist";
+String getSongbyArtist = "${baseURl}song/getArtistSong";
+
+String followArtistURl = "${baseURl}user/followArtist";
+String unfollowArtistUrl = "${baseURl}user/unfollowArtist";

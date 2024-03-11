@@ -2,7 +2,6 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:nepalihiphub/constant/app_colors.dart';
 import 'package:nepalihiphub/controller/nav_bar_controller.dart';
 import 'package:nepalihiphub/view/nav_bar/music_bottom_sheet.dart';
 
@@ -49,7 +48,7 @@ class NavBar extends StatelessWidget {
         //       ]),
         // )
         child: GNav(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             duration:
                 const Duration(milliseconds: 100), // tab animation duration
             gap: 8, // the tab button gap between icon and text

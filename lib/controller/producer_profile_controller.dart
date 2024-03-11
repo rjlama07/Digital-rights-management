@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nepalihiphub/model/artist_model.dart';
 import 'package:nepalihiphub/model/producermodel.dart';
 import 'package:nepalihiphub/services/producer_services.dart';
 
@@ -12,17 +13,17 @@ class ProducerProfileController extends GetxController {
 
   @override
   void onInit() {
-    // TODO: implement onInit
     super.onInit();
-    getProducers();
+    getArtist();
   }
 
   RxBool isLoading = false.obs;
   RxList<ProducerModel> producers = RxList.empty();
+  RxList<ArtistModel> artist = RxList.empty();
 
   Future<void> getProducers() async {
     isLoading.value = true;
-    final response = await ProducerServices().getProducer();
+    final response = await ArtistServices().getProducer();
     isLoading.value = false;
     response.fold((l) {
       producers.value = l;
@@ -31,8 +32,14 @@ class ProducerProfileController extends GetxController {
     });
   }
 
-  TextStyle selectedTextStyle =
-      const TextStyle(color: Colors.white, fontWeight: FontWeight.bold);
-  TextStyle unselectedTextStyle =
-      const TextStyle(color: Colors.grey, fontWeight: FontWeight.w400);
+  Future<void> getArtist() async {
+    isLoading.value = true;
+    final response = await ArtistServices().getArtist();
+    isLoading.value = false;
+    response.fold((l) {
+      artist.value = l;
+    }, (r) {
+      print(r);
+    });
+  }
 }

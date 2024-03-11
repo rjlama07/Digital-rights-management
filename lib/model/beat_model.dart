@@ -17,9 +17,9 @@ class BeatModel {
 
   BeatModel.fromJson(Map<String, dynamic> json) {
     beatName = json["beatName"];
-    beatUrl = json["beatUrl"];
+    beatUrl = json["beatUrl"] ?? "";
     producerName = json["producerName"];
-    imageUrl = json["imageUrl"];
+    imageUrl = json["imageUrl"] ?? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQub8LN4xkfJZkGxHy0wWdrrdwSqBkbYy9Jew&usqp=CAU";
     isFav = json["isFav"] ?? false;
     id = json["_id"];
   }
