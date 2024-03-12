@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:nepalihiphub/controller/nav_bar_controller.dart';
+import 'package:nepalihiphub/view/home_page/home_navigator.dart';
 import 'package:nepalihiphub/view/nav_bar/music_bottom_sheet.dart';
 
 class NavBar extends StatelessWidget {
@@ -28,24 +29,7 @@ class NavBar extends StatelessWidget {
       bottomNavigationBar: Container(
         color: Colors.black,
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-        // child: Obx(
-        //   () => BottomNavigationBar(
-        //       currentIndex: controller.selectedIndex.value,
-        //       onTap: (value) {
-        //         controller.selectedIndex.value = value;
-        //       },
-        //       selectedItemColor: Colors.red,
-        //       unselectedItemColor: Colors.grey.withOpacity(0.4),
-        //       backgroundColor: secondaryBackgroundColor,
-        //       items: const [
-        //         BottomNavigationBarItem(
-        //             label: "Home", icon: Icon(Icons.home)),
-        //         BottomNavigationBarItem(
-        //             label: "Beats", icon: Icon(Icons.music_note)),
-        //         BottomNavigationBarItem(
-        //             label: "Profile",
-        //             icon: Icon(Icons.account_circle_rounded)),
-        //       ]),
+
         // )
         child: GNav(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
@@ -73,6 +57,12 @@ class NavBar extends StatelessWidget {
             selectedIndex: controller.selectedIndex.value,
             onTabChange: (index) {
               controller.selectedIndex.value = index;
+              print("Route==$homeCurrentRoute");
+
+              if (index == 0) {
+                homeNavKey.currentState!.pushReplacementNamed(
+                    '/'); // If the "Home" tab is selected, navigate to the home page
+              }
             }),
       ),
     );

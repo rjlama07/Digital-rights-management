@@ -48,6 +48,9 @@ dependencies:
   go_router: ^9.0.3
   flutter_launcher_icons: ^0.13.1 
   google_nav_bar: ^5.0.6
+  just_audio: ^0.9.36
+  just_audio_background: ^0.0.1-beta.11
+  cached_network_image: ^3.3.1
       
 
 dev_dependencies:

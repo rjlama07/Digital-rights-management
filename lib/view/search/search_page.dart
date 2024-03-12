@@ -13,169 +13,193 @@ class SearchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final musicController = Get.find<NavBarController>();
     return Scaffold(
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 20),
           child: GetBuilder<SearchBeatController>(
-            init: SearchBeatController(),
-            builder: (controller) {
-              return Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.zero,
-                    child: TextField(
-                      onSubmitted: (value) {
-                        controller.searchBeat(value);
-                      },
-                      readOnly: false,
-                      decoration: InputDecoration(
-                        hintText: "Search for music",
-                        suffixIcon: Icon(
-                          size: 18.sp,
-                          Icons.mic,
-                          color: Colors.white,
-                        ),
-                        prefixIcon: Icon(
-                          Icons.search,
-                          color: white,
-                          size: 18.sp,
-                        ),
-                        filled: true,
-                        fillColor: secondaryBackgroundColor,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(22),
-                          borderSide: BorderSide.none,
+              init: SearchBeatController(),
+              builder: (controller) {
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.zero,
+                        child: TextField(
+                          onSubmitted: (value) {
+                            if (value.isNotEmpty) {
+                              controller.searchBeat(value);
+                            }
+                          },
+                          readOnly: false,
+                          decoration: InputDecoration(
+                            hintText: "Search for music",
+                            suffixIcon: Icon(
+                              size: 18.sp,
+                              Icons.mic,
+                              color: Colors.white,
+                            ),
+                            prefixIcon: Icon(
+                              Icons.search,
+                              color: white,
+                              size: 18.sp,
+                            ),
+                            filled: true,
+                            fillColor: secondaryBackgroundColor,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(22),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                  Obx(() => !controller.haveSearched.value
-                      ? const Center(
-                          child: Text("Search for your music"),
-                        )
-                      : controller.isLoading.value
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      Obx(() => !controller.haveSearched.value
                           ? const Center(
-                              child: CircularProgressIndicator(),
+                              child: Text("Search for your music"),
                             )
-                          : controller.searchResult.song.isEmpty &&
-                                  controller.searchResult.artist.isEmpty
+                          : controller.isLoading.value
                               ? const Center(
-                                  child: Text("No data found"),
+                                  child: CircularProgressIndicator(),
                                 )
-                              : Expanded(
-                                  child: Column(
-                                  children: [
-                                    ListView.builder(
-                                      shrinkWrap: true,
-                                      itemCount:
-                                          controller.searchResult.artist.length,
-                                      itemBuilder: (context, index) {
-                                        return ListTile(
-                                          // trailing: IconButton(
-                                          //   padding: EdgeInsets.zero,
-                                          //   constraints: BoxConstraints(
-                                          //       maxHeight: 30.h, maxWidth: 30.w
-                                          //   ),
-                                          //   onPressed: () {
-                                          //     musicController.changeMusic(
-                                          //         imageUrl: controller
-                                          //             .beatModel[index].imageUrl!,
-                                          //         name: controller
-                                          //             .beatModel[index].beatName!,
-                                          //         beatUrl: controller
-                                          //             .beatModel[index].beatUrl!);
-                                          //   },
-                                          //   icon:
-                                          // ),
-                                          onTap: () {
-                                            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                                              return ArtistProfile(artistModel: controller.searchResult.artist[index]);
-                                            },));
-                                          },
-                                          leading: Container(
-                                            height: 50.h,
-                                            width: 50.w,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              image: DecorationImage(
-                                                image: NetworkImage(controller
-                                                    .searchResult
-                                                    .artist[index]
-                                                    .profileUrl),
-                                                fit: BoxFit.cover,
+                              : controller.searchResult.song.isEmpty &&
+                                      controller.searchResult.artist.isEmpty
+                                  ? const Center(
+                                      child: Text("No data found"),
+                                    )
+                                  : Column(
+                                      children: [
+                                        ListView.builder(
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          shrinkWrap: true,
+                                          itemCount: controller
+                                              .searchResult.artist.length,
+                                          itemBuilder: (context, index) {
+                                            return ListTile(
+                                              // trailing: IconButton(
+                                              //   padding: EdgeInsets.zero,
+                                              //   constraints: BoxConstraints(
+                                              //       maxHeight: 30.h, maxWidth: 30.w
+                                              //   ),
+                                              //   onPressed: () {
+                                              //     musicController.changeMusic(
+                                              //         imageUrl: controller
+                                              //             .beatModel[index].imageUrl!,
+                                              //         name: controller
+                                              //             .beatModel[index].beatName!,
+                                              //         beatUrl: controller
+                                              //             .beatModel[index].beatUrl!);
+                                              //   },
+                                              //   icon:
+                                              // ),
+                                              onTap: () {
+                                                Navigator.of(context)
+                                                    .push(MaterialPageRoute(
+                                                  builder: (context) {
+                                                    return ArtistProfile(
+                                                        artistModel: controller
+                                                            .searchResult
+                                                            .artist[index]);
+                                                  },
+                                                ));
+                                              },
+                                              leading: Container(
+                                                height: 50.h,
+                                                width: 50.w,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  image: DecorationImage(
+                                                    image: NetworkImage(
+                                                        controller
+                                                            .searchResult
+                                                            .artist[index]
+                                                            .profileUrl),
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
                                               ),
-                                            ),
-                                          ),
-                                          title: Text(controller
-                                              .searchResult.artist[index].name),
-                                          subtitle: Text("Artist"),
-                                        );
-                                      },
-                                    ),
-                                    ListView.builder(
-                                      shrinkWrap: true,
-                                      itemCount:
-                                          controller.searchResult.song.length,
-                                      itemBuilder: (context, index) {
-                                        return ListTile(
-                                          // trailing: IconButton(
-                                          //   padding: EdgeInsets.zero,
-                                          //   constraints: BoxConstraints(
-                                          //       maxHeight: 30.h, maxWidth: 30.w
-                                          //   ),
-                                          //   onPressed: () {
-                                          //     musicController.changeMusic(
-                                          //         imageUrl: controller
-                                          //             .beatModel[index].imageUrl!,
-                                          //         name: controller
-                                          //             .beatModel[index].beatName!,
-                                          //         beatUrl: controller
-                                          //             .beatModel[index].beatUrl!);
-                                          //   },
-                                          //   icon:
-                                          // ),
-                                          onTap: () {
-                                            musicController.changeMusic(
-                                                imageUrl:
-                                                    controller.searchResult.song[index].imageUrl,
-                                                name: controller.searchResult.song[index].songName,
-                                                beatUrl:
-                                                    controller.searchResult.song[index].songUrl);
+                                              title: Text(controller
+                                                  .searchResult
+                                                  .artist[index]
+                                                  .name),
+                                              subtitle: Text("Artist"),
+                                            );
                                           },
-                                          leading: Container(
-                                            height: 50.h,
-                                            width: 50.w,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              image: DecorationImage(
-                                                image: NetworkImage(controller
-                                                    .searchResult
-                                                    .song[index]
-                                                    .imageUrl),
-                                                fit: BoxFit.cover,
+                                        ),
+                                        ListView.builder(
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          shrinkWrap: true,
+                                          itemCount: controller
+                                              .searchResult.song.length,
+                                          itemBuilder: (context, index) {
+                                            return ListTile(
+                                              // trailing: IconButton(
+                                              //   padding: EdgeInsets.zero,
+                                              //   constraints: BoxConstraints(
+                                              //       maxHeight: 30.h, maxWidth: 30.w
+                                              //   ),
+                                              //   onPressed: () {
+                                              //     musicController.changeMusic(
+                                              //         imageUrl: controller
+                                              //             .beatModel[index].imageUrl!,
+                                              //         name: controller
+                                              //             .beatModel[index].beatName!,
+                                              //         beatUrl: controller
+                                              //             .beatModel[index].beatUrl!);
+                                              //   },
+                                              //   icon:
+                                              // ),
+                                              onTap: () {
+                                                musicController.changeMusic(
+                                                    imageUrl: controller
+                                                        .searchResult
+                                                        .song[index]
+                                                        .imageUrl,
+                                                    name: controller
+                                                        .searchResult
+                                                        .song[index]
+                                                        .songName,
+                                                    beatUrl: controller
+                                                        .searchResult
+                                                        .song[index]
+                                                        .songUrl);
+                                              },
+                                              leading: Container(
+                                                height: 50.h,
+                                                width: 50.w,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  image: DecorationImage(
+                                                    image: NetworkImage(
+                                                        controller
+                                                            .searchResult
+                                                            .song[index]
+                                                            .imageUrl),
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
                                               ),
-                                            ),
-                                          ),
-                                          title: Text(controller
-                                              .searchResult.song[index].songName),
-                                          subtitle: Text("Song"),
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ))),
-                ],
-              );
-            }
-          ),
+                                              title: Text(controller
+                                                  .searchResult
+                                                  .song[index]
+                                                  .songName),
+                                              subtitle: Text("Song"),
+                                            );
+                                          },
+                                        ),
+                                      ],
+                                    )),
+                    ],
+                  ),
+                );
+              }),
         ),
       ),
     );
