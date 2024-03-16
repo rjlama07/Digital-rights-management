@@ -5,6 +5,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:nepalihiphub/controller/nav_bar_controller.dart';
 import 'package:nepalihiphub/view/home_page/home_navigator.dart';
 import 'package:nepalihiphub/view/nav_bar/music_bottom_sheet.dart';
+import 'package:nepalihiphub/view/nav_bar/widgets/controls.dart';
 
 class NavBar extends StatelessWidget {
   const NavBar({super.key});
@@ -57,7 +58,7 @@ class NavBar extends StatelessWidget {
             selectedIndex: controller.selectedIndex.value,
             onTabChange: (index) {
               controller.selectedIndex.value = index;
-              print("Route==$homeCurrentRoute");
+            
 
               if (index == 0) {
                 homeNavKey.currentState!.pushReplacementNamed(
@@ -93,17 +94,17 @@ class _CustomPlayerState extends State<CustomPlayer> {
   void initState() {
     super.initState();
 
-    widget.controller.audioPlayer.onPlayerStateChanged.listen((event) {
-      widget.controller.isPlaying.value = event == PlayerState.playing;
-    });
+    // widget.controller.audioPlayer.onPlayerStateChanged.listen((event) {
+    //   widget.controller.isPlaying.value = event == PlayerState.playing;
+    // });
 
-    widget.controller.audioPlayer.onDurationChanged.listen((event) {
-      widget.controller.changeDuration(event);
-    });
+    // widget.controller.audioPlayer.onDurationChanged.listen((event) {
+    //   widget.controller.changeDuration(event);
+    // });
 
-    widget.controller.audioPlayer.onPositionChanged.listen((event) {
-      widget.controller.changePostion(event);
-    });
+    // widget.controller.audioPlayer.onPositionChanged.listen((event) {
+    //   widget.controller.changePostion(event);
+    // });
 
     // _initAudioPlayer();
   }
@@ -153,25 +154,26 @@ class _CustomPlayerState extends State<CustomPlayer> {
             const SizedBox(width: 10),
             Text(widget.name),
             const Spacer(),
-            InkWell(
-                onTap: () async {
-                  if (widget.controller.isPlaying.value) {
-                    widget.controller.audioPlayer.pause();
-                    widget.controller.isPlaying.value = false;
-                  } else {
-                    await widget.controller.audioPlayer
-                        .play(UrlSource(widget.beatUrl));
-                    widget.controller.isPlaying.value = true;
-                  }
-                },
-                child: Obx(
-                  () => Icon(
-                    widget.controller.isPlaying.value
-                        ? Icons.pause
-                        : Icons.play_arrow,
-                    size: 26,
-                  ),
-                )),
+            // InkWell(
+            //     onTap: () async {
+            //       if (widget.controller.isPlaying.value) {
+            //         widget.controller.audioPlayer.pause();
+            //         widget.controller.isPlaying.value = false;
+            //       } else {
+            //         await widget.controller.audioPlayer
+            //             .play();
+            //         widget.controller.isPlaying.value = true;
+            //       }
+            //     },
+            //     child: Obx(
+            //       () => Icon(
+            //         widget.controller.isPlaying.value
+            //             ? Icons.pause
+            //             : Icons.play_arrow,
+            //         size: 26,
+            //       ),
+            //     )),
+            Control(audioPlayer: widget.controller.audioPlayer),
             const SizedBox(width: 10),
           ],
         ),
@@ -188,3 +190,5 @@ String formatTime(Duration duration) {
 
   return [if (duration.inHours > 0) hours, minutes, seconds].join(":");
 }
+
+

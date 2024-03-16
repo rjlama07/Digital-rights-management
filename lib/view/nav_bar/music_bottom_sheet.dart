@@ -1,11 +1,13 @@
-import 'package:audioplayers/audioplayers.dart';
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_instance/get_instance.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/route_manager.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+
 import 'package:nepalihiphub/constant/app_colors.dart';
 import 'package:nepalihiphub/controller/nav_bar_controller.dart';
+import 'package:nepalihiphub/view/nav_bar/widgets/controls.dart';
+import 'package:rxdart/rxdart.dart' as rx;
 
 class MusicBottomSheet extends StatefulWidget {
   const MusicBottomSheet(
@@ -27,6 +29,19 @@ class _MusicBottomSheetState extends State<MusicBottomSheet>
   bool disposed = false;
   final controller = Get.find<NavBarController>();
 
+  Stream<PositionData> get positionDataStream {
+    return rx.Rx.combineLatest3<Duration, Duration, Duration?, PositionData>(
+      controller.audioPlayer.positionStream,
+      controller.audioPlayer.bufferedPositionStream,
+      controller.audioPlayer.durationStream,
+      (position, bufferedPosition, duration) => PositionData(
+        position: position,
+        bufferedPosition: bufferedPosition,
+        duration: duration ?? Duration.zero,
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -35,17 +50,17 @@ class _MusicBottomSheetState extends State<MusicBottomSheet>
       vsync: this,
     )..repeat();
 
-    controller.audioPlayer.onPlayerStateChanged.listen((event) {
-      controller.isPlaying.value = event == PlayerState.playing;
-    });
+    // controller.audioPlayer.onPlayerStateChanged.listen((event) {
+    //   controller.isPlaying.value = event == PlayerState.playing;
+    // });
 
-    controller.audioPlayer.onDurationChanged.listen((event) {
-      controller.changeDuration(event);
-    });
+    // controller.audioPlayer.onDurationChanged.listen((event) {
+    //   controller.changeDuration(event);
+    // });
 
-    controller.audioPlayer.onPositionChanged.listen((event) {
-      controller.changePostion(event);
-    });
+    // controller.audioPlayer.onPositionChanged.listen((event) {
+    //   controller.changePostion(event);
+    // });
   }
 
   @override
@@ -114,52 +129,49 @@ class _MusicBottomSheetState extends State<MusicBottomSheet>
                     .copyWith(color: Colors.white),
               ),
               SizedBox(height: 30.h),
-              Obx(
-                () => Slider(
-                  activeColor: Colors.red,
-                  max: controller.duration.value.inSeconds.toDouble(),
-                  value: controller.position.value.inSeconds.toDouble(),
-                  onChanged: (value) async {
-                    final position = Duration(seconds: value.toInt());
-                    await controller.audioPlayer.seek(position);
-                  },
-                ),
-              ),
-              Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 18),
-                  child: Obx(
-                    () => Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(formatTime(controller.position.value)),
-                        Text(formatTime(controller.duration.value)),
-                      ],
-                    ),
-                  )),
-              SizedBox(height: 30.h),
-              InkWell(
-                onTap: () async {
-                  if (controller.isPlaying.value) {
-                    controller.audioPlayer.pause();
-
-                    controller.isPlaying.value = false;
-                  } else {
-                    await controller.audioPlayer
-                        .play(UrlSource(widget.beatUrl));
-                    controller.isPlaying.value = true;
-                  }
+              StreamBuilder(
+                stream: positionDataStream,
+                builder: (context, snapshot) {
+                  final positionData = snapshot.data;
+                  return ProgressBar(
+                    barHeight: 8,
+                    baseBarColor: Colors.grey[200],
+                    progressBarColor: Colors.red,
+                    thumbColor: Colors.red,
+                    bufferedBarColor: Colors.grey,
+                    onSeek: controller.audioPlayer.seek,
+                    progress: positionData?.position ?? Duration.zero,
+                    total: positionData?.duration ?? Duration.zero,
+                    buffered: positionData?.bufferedPosition ?? Duration.zero,
+                  );
                 },
-                child: Center(
-                  child: Obx(
-                    () => Icon(
-                      controller.isPlaying.value
-                          ? Icons.pause
-                          : Icons.play_arrow,
-                      size: 30.h,
-                    ),
-                  ),
-                ),
-              )
+              ),
+              
+              SizedBox(height: 30.h),
+              Control(audioPlayer: controller.audioPlayer, iconsize: 30.h),
+              // InkWell(
+              //   onTap: () async {
+              //     if (controller.isPlaying.value) {
+              //       controller.audioPlayer.pause();
+
+              //       controller.isPlaying.value = false;
+              //     } else {
+              //       await controller.audioPlayer
+              //           .play();
+              //       controller.isPlaying.value = true;
+              //     }
+              //   },
+              //   child: Center(
+              //     child: Obx(
+              //       () => Icon(
+              //         controller.isPlaying.value
+              //             ? Icons.pause
+              //             : Icons.play_arrow,
+              //         size: 30.h,
+              //       ),
+              //     ),
+              //   ),
+              // )
             ],
           ),
         );
@@ -175,4 +187,14 @@ String formatTime(Duration duration) {
   final seconds = twoDigits(duration.inSeconds.remainder(60));
 
   return [if (duration.inHours > 0) hours, minutes, seconds].join(":");
+}
+
+class PositionData {
+  final Duration duration;
+  final Duration position;
+  final Duration bufferedPosition;
+  PositionData(
+      {required this.position,
+      required this.bufferedPosition,
+      required this.duration});
 }

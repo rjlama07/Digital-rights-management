@@ -1,14 +1,16 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/state_manager.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:nepalihiphub/view/beats_page/beats_page.dart';
 import 'package:nepalihiphub/view/home_page/home_navigator.dart';
-import 'package:nepalihiphub/view/home_page/home_page.dart';
+
 import 'package:nepalihiphub/view/profile/profile_navigator.dart';
 
 class NavBarController extends GetxController {
   RxInt selectedIndex = 0.obs;
   final audioPlayer = AudioPlayer();
+
   RxBool isCurrentlyPlaying = false.obs;
   String imageURL = "";
   String label = "";
@@ -23,16 +25,6 @@ class NavBarController extends GetxController {
     audioPlayer.dispose();
   }
 
-  void changeDuration(Duration d) {
-    duration.value = d;
-    update();
-  }
-
-  void changePostion(Duration d) {
-    position.value = d;
-    update();
-  }
-
   void changeMusic(
       {required String imageUrl,
       required String name,
@@ -44,7 +36,18 @@ class NavBarController extends GetxController {
     beatURL = beatUrl;
     isCurrentlyPlaying.value = true;
     isPlaying.value = true;
-    audioPlayer.play(UrlSource(beatUrl));
+    AudioSource audioSource = AudioSource.uri(
+      Uri.parse(beatUrl),
+      tag: MediaItem(
+        id: beatUrl,
+        album: name,
+        title: name,
+        artUri: Uri.parse(imageUrl),
+      ),
+    );
+    audioPlayer.setAudioSource(audioSource);
+    audioPlayer.play();
+    audioPlayer.play();
     update();
   }
 

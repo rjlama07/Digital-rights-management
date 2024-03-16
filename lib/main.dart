@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:khalti_flutter/khalti_flutter.dart';
 import 'package:nepalihiphub/constant/app_colors.dart';
 import 'package:nepalihiphub/constant/text.dart';
@@ -10,11 +11,18 @@ import 'package:nepalihiphub/view/splash_screen.dart';
 void main() async {
   await Hive.initFlutter();
   await Hive.openBox('localData');
+  await JustAudioBackground.init(
+    androidNotificationChannelName: 'Nepali Hip Hop',
+    androidNotificationOngoing: true,
+    androidNotificationChannelId: "com.nepalihiphop",
+  
+  );
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+  
 
   // This widget is the root of your application.
   @override

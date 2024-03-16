@@ -24,15 +24,18 @@ class ArtistServices {
   }
 
   Future<Either<List<ArtistModel>, String>> getArtist() async {
-   Box box = Hive.box("localData");
-   String accessToken = box.get("accessToken") ?? "";
-      final headers = {
-          'Content-Type': 'application/json;charset=UTF-8',
-          'Charset': 'utf-8',
-          'authorization': 'Bearer $accessToken'
-        };
+    Box box = Hive.box("localData");
+    String accessToken = box.get("accessToken") ?? "";
+    final headers = {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'Charset': 'utf-8',
+      'authorization': 'Bearer $accessToken'
+    };
+
     try {
-      final response = await dio.get(getArtistUrl,options: Options(headers: headers));
+      final response =
+          await dio.get(getArtistUrl, options: Options(headers:accessToken==""?null : headers));
+      print("nfjkas fnjasbjfkabnjfkas");
       print(response.data);
       List<ArtistModel> artistList = (response.data["artists"] as List)
           .map((e) => ArtistModel.fromJson(e))
