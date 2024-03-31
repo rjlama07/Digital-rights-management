@@ -7,22 +7,24 @@ import 'package:khalti_flutter/khalti_flutter.dart';
 import 'package:nepalihiphub/constant/app_colors.dart';
 import 'package:nepalihiphub/constant/text.dart';
 import 'package:nepalihiphub/view/splash_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() async {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   await Hive.initFlutter();
   await Hive.openBox('localData');
+
   await JustAudioBackground.init(
     androidNotificationChannelName: 'Nepali Hip Hop',
     androidNotificationOngoing: true,
     androidNotificationChannelId: "com.nepalihiphop",
-  
   );
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-  
 
   // This widget is the root of your application.
   @override
@@ -40,6 +42,17 @@ class MyApp extends StatelessWidget {
                   debugShowCheckedModeBanner: false,
                   title: 'Flutter Demo',
                   darkTheme: ThemeData.dark().copyWith(
+                      elevatedButtonTheme: ElevatedButtonThemeData(
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(double.maxFinite, 40),
+                          backgroundColor: const Color(0xFFF0116F),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 50, vertical: 20),
+                          foregroundColor: const Color(0xFF000000),
+                          textStyle: darkTextTheme.labelMedium!.copyWith(
+                              fontSize: 16.sp, fontWeight: FontWeight.w600),
+                        ),
+                      ),
                       inputDecorationTheme: InputDecorationTheme(
                           focusedBorder: const OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.red)),

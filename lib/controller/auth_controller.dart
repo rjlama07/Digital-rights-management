@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:hive_flutter/adapters.dart';
 import 'package:nepalihiphub/services/auth_service.dart';
@@ -10,6 +12,9 @@ class AuthController extends GetxController {
   RxBool isSignup = false.obs;
   RxBool isSignUpLoading = false.obs;
   RxBool isLoginLoading = false.obs;
+  FirebaseAuth auth = FirebaseAuth.instance;
+  GoogleSignIn googleSignIn = GoogleSignIn(scopes: ['email']);
+  RxBool isgoogleauth = false.obs;
 
   @override
   void onInit() {
@@ -52,5 +57,73 @@ class AuthController extends GetxController {
     box.delete("accessToken");
     box.put("isLoggedIn", false);
     isLoggedIn.value = false;
+  }
+
+  void googleSignWithGoogle() async {
+    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+    if (googleUser != null) {
+      try {
+        final GoogleSignInAuthentication googleAuthentication =
+            await googleUser.authentication;
+        final AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleAuthentication.accessToken,
+          idToken: googleAuthentication.idToken,
+        );
+        UserCredential userCredential =
+            await auth.signInWithCredential(credential);
+        isgoogleauth.value = true;
+        // final response = await AuthServices()
+        //     .googleSignup(userCredential.credential!.accessToken.toString());
+        // response.fold((l) {
+        //   storeData(l);
+        // }, (r) {
+        //   SnackShow.getXSnackBar(r, "Error");
+        // // });
+        // box.put("isgoogleauth", isgoogleauth.value);
+        // Get.offAllNamed("/navbar");
+        print("signup sucessfull");
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'account-exists-with-different-credential') {
+          // showMessage(
+          //   "Error",
+          //   'The account already exists with a different credential.',
+          //   () {
+          //     Get.back();
+          //   },
+          //   () {
+          //     Get.back();
+          //   },
+          //   buttonText1: "Try Again",
+          //   buttonText2: "Cancel",
+          // );
+        } else if (e.code == 'invalid-credential') {
+          // showMessage(
+          //   "Error",
+          //   'Error occurred while accessing credentials. Try again.',
+          //   () {
+          //     Get.back();
+          //   },
+          //   () {
+          //     Get.back();
+          //   },
+          //   buttonText1: "Try Again",
+          //   buttonText2: "Cancel",
+          // );
+        }
+      } catch (e) {
+        // showMessage(
+        //   "Error",
+        //   'Error occurred using Google Sign-In. Try again.',
+        //   () {
+        //     Get.back();
+        //   },
+        //   () {
+        //     Get.back();
+        //   },
+        //   buttonText1: "Try Again",
+        //   buttonText2: "Cancel",
+        // );
+      }
+    }
   }
 }

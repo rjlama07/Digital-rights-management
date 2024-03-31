@@ -1,5 +1,4 @@
 class SongModel{
-
   String songName;
   String songUrl;
   String imageUrl;
@@ -22,7 +21,6 @@ class SongModel{
       artist: json["artist"],
     );
   }
-
 }
 
 

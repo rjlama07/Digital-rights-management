@@ -17,3 +17,4 @@ String getArtistUrl = "${baseURl}artist/getArtist";
 String getSongbyArtist = "${baseURl}song/getArtistSong";
 String followArtistURl = "${baseURl}user/followArtist";
 String unfollowArtistUrl = "${baseURl}user/unfollowArtist";
+String newApi = "http://";

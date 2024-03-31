@@ -11,6 +11,7 @@ class ArtistServices {
   Future<Either<List<ProducerModel>, String>> getProducer() async {
     try {
       final response = await dio.get(getProducersUrl);
+      print(response.data);
       List<ProducerModel> list = (response.data["producer"] as List)
           .map((e) => ProducerModel.fromJson(e))
           .toList();
@@ -31,18 +32,21 @@ class ArtistServices {
       'Charset': 'utf-8',
       'authorization': 'Bearer $accessToken'
     };
+    print("get artist called");
 
     try {
-      final response =
-          await dio.get(getArtistUrl, options: Options(headers:accessToken==""?null : headers));
-      print("nfjkas fnjasbjfkabnjfkas");
+      print("new mew");
+      print("this is access token $accessToken");
+      final response = await dio.get(getArtistUrl,
+          options: Options(headers: accessToken == "" ? null : headers));
+      print("new mew");
       print(response.data);
+
       List<ArtistModel> artistList = (response.data["artists"] as List)
           .map((e) => ArtistModel.fromJson(e))
           .toList();
       return left(artistList);
     } on DioException catch (e) {
-      print(e.response!.data);
       return right(e.toString());
     } catch (e) {
       return right(e.toString());
