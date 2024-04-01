@@ -24,6 +24,22 @@ class AuthServices {
     }
   }
 
+  Future<Either<bool, String>> googleSignup(String token) async {
+    try {
+      final data = {"idToken": token};
+      final response = await Dio().post(signinwithGoogleUrl, data: data);
+      Hive.box("localData").put("accessToken", response.data["accessToken"]);
+      // final responseData = UserModel.fromJson(response.data);
+      return left(true);
+    } on DioException catch (e) {
+      if (e.toString().contains("Failed host lookup")) {
+        return right("No Internet Connection");
+      } else {
+        return right("Error sigin with gogole");
+      }
+    }
+  }
+
   Future<Either<bool, String>> changePassword(
       String oldPassword, String newPassword) async {
     String accessToken = box.get("accessToken");

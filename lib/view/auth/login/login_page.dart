@@ -1,13 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/get_instance.dart';
 import 'package:get/get_navigation/get_navigation.dart';
+import 'package:nepalihiphub/controller/auth_controller.dart';
 import 'package:nepalihiphub/view/nav_bar/nav_bar.dart';
 
-class MainLoginPage extends StatelessWidget {
+class MainLoginPage extends StatefulWidget {
   const MainLoginPage({super.key});
 
   @override
+  State<MainLoginPage> createState() => _MainLoginPageState();
+}
+
+class _MainLoginPageState extends State<MainLoginPage> {
+  late final TextEditingController email;
+  late final TextEditingController controller1;
+
+  @override
   Widget build(BuildContext context) {
+    final controller = Get.find<AuthController>();
     return Scaffold(
       appBar: AppBar(
         title: Text("Login", style: Theme.of(context).textTheme.titleLarge),
@@ -43,8 +54,7 @@ class MainLoginPage extends StatelessWidget {
               ),
               ElevatedButton(
                   onPressed: () {
-                    print("Helow worlr");
-                    Get.to(NavBar());
+                    controller.login(email.text, controller1.text);
                   },
                   child: const Center(child: Text("Login"))),
             ],

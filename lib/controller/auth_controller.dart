@@ -59,7 +59,10 @@ class AuthController extends GetxController {
     isLoggedIn.value = false;
   }
 
-  void googleSignWithGoogle() async {
+  void googleSignWithGoogle({
+    required Function onsucess,
+    required void Function(String) onerror,
+  }) async {
     final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
     if (googleUser != null) {
       try {
@@ -72,16 +75,15 @@ class AuthController extends GetxController {
         UserCredential userCredential =
             await auth.signInWithCredential(credential);
         isgoogleauth.value = true;
-        // final response = await AuthServices()
-        //     .googleSignup(userCredential.credential!.accessToken.toString());
-        // response.fold((l) {
-        //   storeData(l);
-        // }, (r) {
-        //   SnackShow.getXSnackBar(r, "Error");
-        // // });
-        // box.put("isgoogleauth", isgoogleauth.value);
-        // Get.offAllNamed("/navbar");
-        print("signup sucessfull");
+        final serverResponse =
+            await AuthServices().googleSignup(googleAuthentication.idToken!);
+        serverResponse.fold((l) {
+          box.put("isLoggedIn", true);
+          isLoggedIn.value = true;
+          onsucess();
+        }, (r) {
+          onerror(r);
+        });
       } on FirebaseAuthException catch (e) {
         if (e.code == 'account-exists-with-different-credential') {
           // showMessage(

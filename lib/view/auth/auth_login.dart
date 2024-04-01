@@ -6,6 +6,7 @@ import 'package:nepalihiphub/constant/text.dart';
 import 'package:nepalihiphub/controller/auth_controller.dart';
 import 'package:nepalihiphub/view/auth/login/login_page.dart';
 import 'package:nepalihiphub/view/auth/signup/auth_signup.dart';
+import 'package:nepalihiphub/view/nav_bar/nav_bar.dart';
 
 class AuthPageMain extends StatelessWidget {
   const AuthPageMain({super.key});
@@ -52,7 +53,12 @@ class AuthPageMain extends StatelessWidget {
                         borderRadius: BorderRadius.circular(40),
                       ),
                     ),
-                    onPressed: () => controller.googleSignWithGoogle(),
+                    onPressed: () => controller.googleSignWithGoogle(
+                          onerror: (p0) => Get.snackbar("", p0),
+                          onsucess: () {
+                            Get.off(const NavBar());
+                          },
+                        ),
                     child: Row(
                       children: [
                         Image.asset("assets/images/google.png"),
