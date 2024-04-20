@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:nepalihiphub/constant/app_colors.dart';
 import 'package:nepalihiphub/controller/auth_controller.dart';
 import 'package:nepalihiphub/controller/profile_controller.dart';
+import 'package:nepalihiphub/view/auth/auth_login.dart';
 import 'package:nepalihiphub/view/profile/setting_screens.dart';
 
 import 'favourites.dart';
@@ -14,7 +15,7 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<AuthController>();
+    Get.lazyPut(() => ProfileController());
     final profileController = Get.put(ProfileController());
     return Scaffold(
         appBar: AppBar(
@@ -26,77 +27,6 @@ class ProfilePage extends StatelessWidget {
             "Profile",
             style: Theme.of(context).textTheme.titleLarge,
           ),
-          actions: [
-            InkWell(
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: Text(
-                        "Are yu sure you want to logout?",
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      content: Row(
-                        children: [
-                          Expanded(
-                              child: InkWell(
-                            onTap: () => Get.back(),
-                            child: Container(
-                              height: 30,
-                              color: Colors.grey,
-                              child: Center(
-                                child: Text(
-                                  "No",
-                                  style: Theme.of(context).textTheme.labelLarge,
-                                ),
-                              ),
-                            ),
-                          )),
-                          const SizedBox(width: 8),
-                          Expanded(
-                              child: InkWell(
-                            onTap: () {
-                              controller.logOut();
-                              Get.back();
-                            },
-                            child: Container(
-                              height: 30,
-                              color: Colors.red,
-                              child: Center(
-                                child: Text(
-                                  "Yes",
-                                  style:
-                                      Theme.of(context).textTheme.labelMedium,
-                                ),
-                              ),
-                            ),
-                          )),
-                        ],
-                      ),
-                    );
-                  },
-                );
-              },
-              child: Row(
-                children: [
-                  const Icon(
-                    Iconsax.logout,
-                    color: Colors.red,
-                  ),
-                  SizedBox(width: MediaQuery.of(context).size.width * 0.02),
-                  Text(
-                    "Logout",
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleSmall!
-                        .copyWith(color: Colors.red),
-                  ),
-                  SizedBox(width: MediaQuery.of(context).size.width * 0.03),
-                ],
-              ),
-            )
-          ],
         ),
         body: Obx(
           () => SafeArea(

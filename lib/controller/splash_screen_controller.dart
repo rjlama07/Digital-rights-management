@@ -9,6 +9,7 @@ class SplashScreenController extends GetxController {
   void onInit() {
     super.onInit();
     final accessToken = AccessTokenService().getAccessToken();
+    print(accessToken);
     Future.delayed(const Duration(seconds: 2), () {
       if (accessToken == "") {
         Get.off(const AuthPageMain());

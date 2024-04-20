@@ -17,6 +17,41 @@ class _MainLoginPageState extends State<MainLoginPage> {
   late final TextEditingController controller1;
 
   @override
+  void initState() {
+    email = TextEditingController();
+    controller1 = TextEditingController();
+
+    super.initState();
+  }
+
+  Widget buildTextField({
+    required String hintText,
+    bool isObsecure = false,
+    required TextEditingController controller,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(hintText),
+        const SizedBox(height: 10),
+        TextFormField(
+          controller: controller,
+          validator: (value) => value!.isEmpty ? "Field is required" : null,
+          obscureText: isObsecure,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            fillColor: const Color(0xFF777777),
+            filled: true,
+            hintText: hintText,
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     final controller = Get.find<AuthController>();
     return Scaffold(
@@ -29,25 +64,17 @@ class _MainLoginPageState extends State<MainLoginPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Login", style: Theme.of(context).textTheme.titleLarge),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.04),
-              TextFormField(
-                decoration: const InputDecoration(
-                  hintText: "Email",
-                  border: OutlineInputBorder(),
-                ),
+              buildTextField(
+                hintText: "Email",
+                controller: email,
               ),
               const SizedBox(
                 height: 20,
               ),
-              TextFormField(
-                obscureText: true,
-                decoration: const InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.red)),
-                  border: OutlineInputBorder(),
-                  hintText: "Password",
-                ),
+              buildTextField(
+                hintText: "Password",
+                isObsecure: true,
+                controller: controller1,
               ),
               const SizedBox(
                 height: 20,

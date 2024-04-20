@@ -4,6 +4,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:nepalihiphub/constant/api.dart';
 import 'package:nepalihiphub/model/song_model.dart';
 import 'package:nepalihiphub/services/song_service.dart';
+import 'package:nepalihiphub/view/nav_bar/nav_bar.dart';
 
 class ProducerDetailsController extends GetxController {
   String artistId;
@@ -28,10 +29,11 @@ class ProducerDetailsController extends GetxController {
         'authorization': 'Bearer $accessToken'
       };
 
-     final response=await Dio().put(isFollowing ? unfollowArtistUrl : followArtistURl,data: {"artistId":artistID},
+      final response = await Dio().put(
+          isFollowing ? unfollowArtistUrl : followArtistURl,
+          data: {"artistId": artistID},
           options: Options(headers: headers));
       print(response.data);
-          
     } on DioException catch (e) {
       print(e.response!.data);
     } catch (e) {

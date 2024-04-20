@@ -3,6 +3,13 @@ import 'package:dio/dio.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:nepalihiphub/constant/api.dart';
 
+class LoginResponse {
+  final String accessToken;
+  final List<String> artistFollowing;
+
+  LoginResponse({required this.accessToken, required this.artistFollowing});
+}
+
 class AuthServices {
   Box box = Hive.box("localdata");
   final dio = Dio();
@@ -28,14 +35,16 @@ class AuthServices {
     try {
       final data = {"idToken": token};
       final response = await Dio().post(signinwithGoogleUrl, data: data);
+      print(response.data);
       Hive.box("localData").put("accessToken", response.data["accessToken"]);
       // final responseData = UserModel.fromJson(response.data);
       return left(true);
     } on DioException catch (e) {
+      print(e);
       if (e.toString().contains("Failed host lookup")) {
         return right("No Internet Connection");
       } else {
-        return right("Error sigin with gogole");
+        return right("Error sigin with Google");
       }
     }
   }
@@ -58,7 +67,8 @@ class AuthServices {
     }
   }
 
-  Future<Either<bool, String>> login(String email, String password) async {
+  Future<Either<LoginResponse, String>> login(
+      String email, String password) async {
     final body = {
       "email": email,
       "password": password,
@@ -66,7 +76,10 @@ class AuthServices {
     try {
       final response = await dio.post(loginUrl, data: body);
       Hive.box("localData").put("accessToken", response.data["accessToken"]);
-      return left(true);
+      LoginResponse loginResponse = LoginResponse(
+          accessToken: response.data["accessToken"],
+          artistFollowing: response.data["artistFollowing"].cast<String>());
+      return left(loginResponse);
     } on DioException catch (e) {
       return right(e.response!.data["error"]);
     }

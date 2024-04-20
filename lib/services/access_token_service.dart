@@ -11,4 +11,8 @@ class AccessTokenService {
   void saveAccessToken(String accessToken) {
     box.put("accessToken", accessToken);
   }
+
+  void deleteAccessToken() {
+    box.delete("accessToken");
+  }
 }

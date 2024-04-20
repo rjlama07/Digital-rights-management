@@ -35,8 +35,6 @@ class ArtistServices {
     print("get artist called");
 
     try {
-      print("new mew");
-      print("this is access token $accessToken");
       final response = await dio.get(getArtistUrl,
           options: Options(headers: accessToken == "" ? null : headers));
       print("new mew");

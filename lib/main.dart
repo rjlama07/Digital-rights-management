@@ -6,6 +6,7 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:khalti_flutter/khalti_flutter.dart';
 import 'package:nepalihiphub/constant/app_colors.dart';
 import 'package:nepalihiphub/constant/text.dart';
+import 'package:nepalihiphub/services/access_token_service.dart';
 import 'package:nepalihiphub/view/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -15,6 +16,9 @@ Future<void> main() async {
   await Hive.initFlutter();
   await Hive.openBox('localData');
 
+  Box box = Hive.box('localData');
+  AccessTokenService().deleteAccessToken();
+
   await JustAudioBackground.init(
     androidNotificationChannelName: 'Nepali Hip Hop',
     androidNotificationOngoing: true,
@@ -22,7 +26,6 @@ Future<void> main() async {
   );
   runApp(const MyApp());
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

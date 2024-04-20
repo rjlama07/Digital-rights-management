@@ -1,4 +1,4 @@
-String baseURl = "http://192.168.1.248:3000/";
+String baseURl = "http://192.168.1.66:3000/";
 // String baseURl = "https://drm-8gc9.onrender.com/";
 String loginUrl = "${baseURl}user/login";
 String signUpUrl = "${baseURl}user/signup";
@@ -18,3 +18,5 @@ String getSongbyArtist = "${baseURl}song/getArtistSong";
 String followArtistURl = "${baseURl}user/followArtist";
 String unfollowArtistUrl = "${baseURl}user/unfollowArtist";
 String signinwithGoogleUrl = "${baseURl}oauth/signInWithGoogle";
+String followMultipleArtistUrl = "${baseURl}user/followMultipleArtist";
+String getUserLibrary = "${baseURl}user/getUserLibrary";

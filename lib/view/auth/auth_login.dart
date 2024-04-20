@@ -11,6 +11,33 @@ import 'package:nepalihiphub/view/nav_bar/nav_bar.dart';
 class AuthPageMain extends StatelessWidget {
   const AuthPageMain({super.key});
 
+  Widget buildTextField({
+    required String hintText,
+    bool isObsecure = false,
+    required TextEditingController controller,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(hintText),
+        const SizedBox(height: 10),
+        TextFormField(
+          controller: controller,
+          validator: (value) => value!.isEmpty ? "Field is required" : null,
+          obscureText: isObsecure,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            fillColor: const Color(0xFF777777),
+            filled: true,
+            hintText: hintText,
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(AuthController());

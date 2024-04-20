@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/state_manager.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
-import 'package:nepalihiphub/view/beats_page/beats_page.dart';
+import 'package:nepalihiphub/view/beats_page/user_library_page.dart';
 import 'package:nepalihiphub/view/home_page/home_navigator.dart';
-
-import 'package:nepalihiphub/view/profile/profile_navigator.dart';
+import 'package:nepalihiphub/view/profile/profile_page.dart';
 
 class NavBarController extends GetxController {
   RxInt selectedIndex = 0.obs;
@@ -51,5 +50,9 @@ class NavBarController extends GetxController {
     update();
   }
 
-  List<Widget> pages = const [HomeNavigator(), BeatPage(), ProfileNavigator()];
+  List<Widget> pages = const [
+    HomeNavigator(),
+    UserLibraryPage(),
+    ProfilePage()
+  ];
 }
