@@ -3,11 +3,14 @@ on:
     branches:
       - main
       - master
+      - new-ui
   push:
     branches:
       - main
       - master
       - develop
+      - new-ui
+
 name: "Build & Release"
 jobs:
   build:
@@ -24,19 +27,14 @@ jobs:
           channel: "stable"
           architecture: x64
 
-      - run: flutter build apk --release --split-per-abi
-      - run: |
-          flutter build ios --no-codesign
-          cd build/ios/iphoneos
-          mkdir Payload
-          cd Payload
-          ln -s ../Runner.app
-          cd ..
-          zip -r app.ipa Payload
+      - run: flutter build windows --release
+      - run: flutter build linux --release
+      - run: flutter build macos --release
+
       - name: Push to Releases
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/app/outputs/apk/release/*,build/ios/iphoneos/app.ipa"
+          artifacts: "build/windows/runner/Release/*.exe, build/linux/x64/release/*.AppImage, build/macos/Build/Products/Release/*.app"
           tag: v1.0.${{ github.run_number }}
           token: ${{ secrets.TOKEN }}
 # push to master, main, develop

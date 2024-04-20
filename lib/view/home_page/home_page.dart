@@ -239,7 +239,7 @@ class Homepage extends StatelessWidget {
                               return InkWell(
                                 onTap: () => Navigator.of(context)
                                     .push(MaterialPageRoute(
-                                  builder: (context) =>  ArtistProfile(
+                                  builder: (context) => ArtistProfile(
                                     artistModel: controller.artist[index],
                                   ),
                                 )),
@@ -404,6 +404,3 @@ class Homepage extends StatelessWidget {
     ));
   }
 }
-
-
-
