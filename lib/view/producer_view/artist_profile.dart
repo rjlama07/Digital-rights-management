@@ -17,8 +17,9 @@ class _ArtistProfileState extends State<ArtistProfile> {
   void followUnfollow() {
     Get.find<ProducerDetailsController>().followUnfollowArtist(
         widget.artistModel.id,
+        artistModel: widget.artistModel,
         isFollowing: widget.artistModel.isFollowing);
-    widget.artistModel.isFollowing = !widget.artistModel.isFollowing;  
+    widget.artistModel.isFollowing = !widget.artistModel.isFollowing;
     setState(() {});
   }
 
@@ -50,6 +51,7 @@ class _ArtistProfileState extends State<ArtistProfile> {
                             child: Text("No song found"),
                           )
                         : Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Visibility(
                                 visible: index == 0,
@@ -57,6 +59,8 @@ class _ArtistProfileState extends State<ArtistProfile> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 22),
                                   child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       const SizedBox(
                                         height: 30,
@@ -68,8 +72,10 @@ class _ArtistProfileState extends State<ArtistProfile> {
                                           InkWell(
                                             onTap: () => followUnfollow(),
                                             child: Container(
-                                              padding: const EdgeInsets.symmetric(
-                                                  horizontal: 8, vertical: 8),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 8,
+                                                      vertical: 8),
                                               decoration: BoxDecoration(
                                                   borderRadius:
                                                       BorderRadius.circular(12),
@@ -79,7 +85,8 @@ class _ArtistProfileState extends State<ArtistProfile> {
                                                 widget.artistModel.isFollowing
                                                     ? "Following"
                                                     : "Follow",
-                                                style: const TextStyle(fontSize: 12),
+                                                style: const TextStyle(
+                                                    fontSize: 12),
                                               ),
                                             ),
                                           ),
@@ -106,6 +113,7 @@ class _ArtistProfileState extends State<ArtistProfile> {
                                             ? "https://scontent.fktm8-1.fna.fbcdn.net/v/t39.30808-6/428657177_122100298364221583_4711367863059791283_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=5f2048&_nc_ohc=_8fVjhUNfT8AX_Mp5M7&_nc_ht=scontent.fktm8-1.fna&oh=00_AfAkZZibrkJNtCfJ1PreEWs-u6j__F6cpQc-3IkO7U2Vxg&oe=65F3C64C"
                                             : controller.song[index].imageUrl,
                                         name: controller.song[index].songName,
+                                        beatId: controller.song[index].id,
                                         beatUrl:
                                             controller.song[index].songUrl);
                                   },

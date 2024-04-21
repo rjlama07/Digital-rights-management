@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nepalihiphub/constant/app_colors.dart';
 
@@ -36,34 +38,31 @@ class TrendingMusic extends StatelessWidget {
             ),
           ),
           SizedBox(width: 20.w),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                musicTitle,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall!
-                    .copyWith(color: textColor1),
-              ),
-              SizedBox(height: 1.h),
-              Text(
-                musicArtist,
-                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Flexible(
+                  child: Text(
+                    musicTitle,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall!
+                        .copyWith(color: textColor1),
+                  ),
+                ),
+                SizedBox(height: 2.h),
+                Text(
+                  requiredViews,
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
                       color: textColor1,
                       fontWeight: FontWeight.w500,
-                    ),
-              ),
-              SizedBox(height: 2.h),
-              Text(
-                requiredViews,
-                style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                    color: textColor1,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 10.sp),
-              ),
-            ],
+                      fontSize: 10.sp),
+                ),
+              ],
+            ),
           )
         ],
       ),

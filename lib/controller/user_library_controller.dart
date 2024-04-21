@@ -1,9 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+
 import 'package:nepalihiphub/constant/api.dart';
 import 'package:nepalihiphub/model/artist_model.dart';
-import 'package:nepalihiphub/model/user.dart';
+
+import 'package:nepalihiphub/services/access_token_service.dart';
 
 class UserLibraryController extends GetxController {
   final dio = Dio();
@@ -17,12 +18,29 @@ class UserLibraryController extends GetxController {
     getLibrary();
   }
 
+  void updateFollowArtist(bool follow, ArtistModel artistModel) {
+    if (follow) {
+      userLibraryModel.artistfollowiung.add(artistModel);
+    } else {
+      userLibraryModel.artistfollowiung.remove(artistModel);
+    }
+    update();
+  }
+
   Future<void> getLibrary() async {
     isLoading.value = true;
     try {
-      final response = await dio.get(getUserLibrary);
+      String accessToken = AccessTokenService().getAccessToken();
+      final headers = {
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Charset': 'utf-8',
+        'authorization': 'Bearer $accessToken'
+      };
+      final response =
+          await dio.get(getUserLibrary, options: Options(headers: headers));
       userLibraryModel = UserLibraryModel.fromJson(response.data);
     } on DioException catch (e) {
+      print(e);
     } catch (e) {
       print(e);
     }
@@ -37,7 +55,7 @@ class UserLibraryModel {
 
   factory UserLibraryModel.fromJson(Map<String, dynamic> json) {
     return UserLibraryModel(
-      artistfollowiung: (json['artistfollowing'] as List)
+      artistfollowiung: (json['artistFollowing'] as List)
           .map((e) => ArtistModel.fromJson(e))
           .toList(),
     );

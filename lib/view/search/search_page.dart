@@ -157,6 +157,10 @@ class SearchPage extends StatelessWidget {
                                               // ),
                                               onTap: () {
                                                 musicController.changeMusic(
+                                                    beatId: controller
+                                                        .searchResult
+                                                        .song[index]
+                                                        .id,
                                                     imageUrl: controller
                                                         .searchResult
                                                         .song[index]

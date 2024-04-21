@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:nepalihiphub/constant/api.dart';
 import 'package:nepalihiphub/model/user.dart';
 import 'package:dio/dio.dart' as dio;
+import 'package:nepalihiphub/services/access_token_service.dart';
 import 'package:nepalihiphub/services/auth_service.dart';
 
 class ProfileController extends GetxController {
@@ -45,7 +46,7 @@ class ProfileController extends GetxController {
 
   Future<void> changeProfileImage(ImageSource imageSource) async {
     isImageUploading.value = true;
-    String accessToken = box.get("accessToken");
+    String accessToken = AccessTokenService().getAccessToken();
 
     final image = await ImagePicker().pickImage(source: imageSource);
     if (image != null) {
@@ -69,6 +70,7 @@ class ProfileController extends GetxController {
         user.value!.imageUrl = imageUrl;
         isImageUploading.value = false;
       } on DioException catch (error) {
+        print(error.response!.statusCode);
         isImageUploading.value = false;
         print(error.response!.data);
       }

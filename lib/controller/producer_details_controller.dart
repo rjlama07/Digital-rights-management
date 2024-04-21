@@ -2,9 +2,10 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:nepalihiphub/constant/api.dart';
+import 'package:nepalihiphub/controller/user_library_controller.dart';
+import 'package:nepalihiphub/model/artist_model.dart';
 import 'package:nepalihiphub/model/song_model.dart';
 import 'package:nepalihiphub/services/song_service.dart';
-import 'package:nepalihiphub/view/nav_bar/nav_bar.dart';
 
 class ProducerDetailsController extends GetxController {
   String artistId;
@@ -19,7 +20,7 @@ class ProducerDetailsController extends GetxController {
   RxList<SongModel> song = RxList.empty();
 
   Future<void> followUnfollowArtist(String artistID,
-      {required bool isFollowing}) async {
+      {required bool isFollowing, required ArtistModel artistModel}) async {
     try {
       Box box = Hive.box("localData");
       String accessToken = box.get("accessToken") ?? "";
@@ -33,6 +34,8 @@ class ProducerDetailsController extends GetxController {
           isFollowing ? unfollowArtistUrl : followArtistURl,
           data: {"artistId": artistID},
           options: Options(headers: headers));
+      Get.find<UserLibraryController>()
+          .updateFollowArtist(isFollowing, artistModel);
       print(response.data);
     } on DioException catch (e) {
       print(e.response!.data);

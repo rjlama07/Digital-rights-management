@@ -6,7 +6,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:nepalihiphub/constant/app_colors.dart';
 import 'package:nepalihiphub/controller/nav_bar_controller.dart';
-import 'package:nepalihiphub/model/beat_model.dart';
+import 'package:nepalihiphub/model/song_model.dart';
 
 import 'package:nepalihiphub/view/producer_view/artist_profile.dart';
 import 'package:nepalihiphub/view/producer_view/producer_view.dart';
@@ -51,10 +51,11 @@ class Homepage extends StatelessWidget {
     return Scaffold(
         body: RefreshIndicator(
       onRefresh: () async {
-        freeBeatController.getFreebeat();
+        freeBeatController.getTrendingSongs();
         controller.getArtist();
       },
       child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 20),
@@ -110,17 +111,17 @@ class Homepage extends StatelessWidget {
                               width: 10,
                             ),
                             scrollDirection: Axis.horizontal,
-                            itemCount: freeBeatController.freeBeats.length,
+                            itemCount: freeBeatController.trendingSong.length,
                             itemBuilder: (context, index) {
                               return InkWell(
                                 onTap: () {
-                                  BeatModel beatModel =
-                                      freeBeatController.freeBeats[index];
+                                  SongModel beatModel =
+                                      freeBeatController.trendingSong[index];
                                   musicController.changeMusic(
-                                      imageUrl: beatModel.imageUrl!,
-                                      name:
-                                          "${beatModel.beatName!}-${beatModel.producerName!}",
-                                      beatUrl: beatModel.beatUrl!);
+                                      beatId: beatModel.id,
+                                      imageUrl: beatModel.imageUrl,
+                                      name: beatModel.songName,
+                                      beatUrl: beatModel.songUrl);
                                 },
                                 onLongPress: () {
                                   showDialog(
@@ -202,12 +203,13 @@ class Homepage extends StatelessWidget {
                                 },
                                 child: TrendingMusic(
                                   musicTitle: freeBeatController
-                                      .freeBeats[index].beatName!,
+                                      .trendingSong[index].songName,
                                   musicArtist: freeBeatController
-                                      .freeBeats[index].producerName!,
-                                  requiredViews: "100m Streams",
+                                      .trendingSong[index].artist,
+                                  requiredViews:
+                                      "${freeBeatController.trendingSong[index].stream} Streams",
                                   imageUrl: freeBeatController
-                                      .freeBeats[index].imageUrl!,
+                                      .trendingSong[index].imageUrl,
                                 ),
                               );
                             },
@@ -294,6 +296,8 @@ class Homepage extends StatelessWidget {
                         itemBuilder: (context, index) => ListTile(
                               onTap: () {
                                 musicController.changeMusic(
+                                    beatId:
+                                        freeBeatController.freeBeats[index].id!,
                                     imageUrl: freeBeatController
                                         .freeBeats[index].imageUrl!,
                                     name:

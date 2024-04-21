@@ -32,6 +32,7 @@ class FavouritePage extends StatelessWidget {
                     return InkWell(
                       onTap: () {
                         Get.find<NavBarController>().changeMusic(
+                            beatId: data.id!,
                             imageUrl: data.imageUrl!,
                             name: data.beatName!,
                             beatUrl: data.beatUrl!);

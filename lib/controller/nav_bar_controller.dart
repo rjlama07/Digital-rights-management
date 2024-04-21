@@ -1,7 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:nepalihiphub/constant/api.dart';
 import 'package:nepalihiphub/view/beats_page/user_library_page.dart';
 import 'package:nepalihiphub/view/home_page/home_navigator.dart';
 import 'package:nepalihiphub/view/profile/profile_page.dart';
@@ -24,10 +27,29 @@ class NavBarController extends GetxController {
     audioPlayer.dispose();
   }
 
-  void changeMusic(
-      {required String imageUrl,
-      required String name,
-      required String beatUrl}) {
+  final dio = Dio();
+
+  Future<void> addStreamCount(String songId) async {
+    try {
+      dio.put(addStreamCountUrl, data: {"songId": songId});
+      debugPrint("-------------Song Count Added---------------");
+    } on DioException catch (e) {
+      debugPrint("----------------Song Count Error-----------------");
+      debugPrint(e.toString());
+    } catch (e) {
+      debugPrint("----------------Song Count Error-----------------");
+      debugPrint(e.toString());
+    }
+  }
+
+  void changeMusic({
+    required String imageUrl,
+    required String name,
+    required String beatId,
+    required String beatUrl,
+    bool isPlayList = false,
+    List<String>? songUrls,
+  }) {
     isCurrentlyPlaying.value = false;
 
     imageURL = imageUrl;
@@ -47,6 +69,7 @@ class NavBarController extends GetxController {
     audioPlayer.setAudioSource(audioSource);
     audioPlayer.play();
     audioPlayer.play();
+    addStreamCount(beatId);
     update();
   }
 

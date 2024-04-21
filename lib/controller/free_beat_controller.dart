@@ -1,20 +1,24 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_rx/get_rx.dart';
 
 import 'package:hive_flutter/adapters.dart';
 import 'package:nepalihiphub/constant/api.dart';
 import 'package:nepalihiphub/model/beat_model.dart';
+import 'package:nepalihiphub/model/song_model.dart';
 import 'package:nepalihiphub/services/beats_services.dart';
 
 class FreeBeatController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    getFreebeat();
+    getTrendingSongs();
   }
 
   Box box = Hive.box("localData");
+
+  RxList<SongModel> trendingSong = RxList.empty();
 
   RxString downlaodState = "Download now".obs;
   Future<void> addToFavourite({required String id, required int index}) async {
@@ -58,5 +62,20 @@ class FreeBeatController extends GetxController {
             },
         (r) => {debugPrint(r)});
     isLoading.value = false;
+  }
+
+  Future<void> getTrendingSongs() async {
+    try {
+      isLoading.value = true;
+      final response = await Dio().get(getTrendingSongUrl);
+      trendingSong.value = (response.data["songs"] as List)
+          .map((e) => SongModel.fromJson(e))
+          .toList();
+
+      print("--------------Sucessfull get trending sonfgs--------------------");
+      isLoading.value = false;
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 }

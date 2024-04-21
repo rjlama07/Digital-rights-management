@@ -63,6 +63,7 @@ class FollowArtistPage extends StatelessWidget {
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisSpacing: 10,
+                                childAspectRatio: 0.7,
                                 mainAxisSpacing: 20,
                                 crossAxisCount: 3),
                         itemBuilder: (context, index) {
