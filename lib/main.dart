@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
@@ -24,6 +26,24 @@ Future<void> main() async {
     androidNotificationChannelId: "com.nepalihiphop",
   );
   runApp(const MyApp());
+}
+
+Future<String> getLocalIPAddress() async {
+  // Get the list of network interfaces
+  var interfaces = await NetworkInterface.list();
+  // Iterate over each interface
+  for (var interface in interfaces) {
+    // Iterate over each address in the interface
+    for (var addr in interface.addresses) {
+      // Check if the address is IPv4 and not loopback
+      if (addr.type == InternetAddressType.IPv4 && !addr.isLoopback) {
+        // Return the IP address
+        return addr.address;
+      }
+    }
+  }
+  // Return null if no IPv4 address found
+  return "";
 }
 
 class MyApp extends StatelessWidget {

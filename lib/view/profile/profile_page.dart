@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:nepalihiphub/constant/app_colors.dart';
 import 'package:nepalihiphub/controller/auth_controller.dart';
 import 'package:nepalihiphub/controller/profile_controller.dart';
+import 'package:nepalihiphub/services/access_token_service.dart';
 import 'package:nepalihiphub/view/auth/auth_login.dart';
 import 'package:nepalihiphub/view/profile/setting_screens.dart';
 
@@ -27,6 +28,15 @@ class ProfilePage extends StatelessWidget {
             "Profile",
             style: Theme.of(context).textTheme.titleLarge,
           ),
+          actions: [
+            IconButton(
+              onPressed: () {
+                AccessTokenService().deleteAccessToken();
+                Get.offAll(() => const AuthPageMain());
+              },
+              icon: const Icon(Icons.logout),
+            )
+          ],
         ),
         body: Obx(
           () => SafeArea(

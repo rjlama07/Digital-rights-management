@@ -90,7 +90,31 @@ class _ArtistProfileState extends State<ArtistProfile> {
                                               ),
                                             ),
                                           ),
-                                          const Icon(Icons.menu_outlined)
+                                          InkWell(
+                                            onTap: () {
+                                              Get.find<
+                                                      NavBarController>()
+                                                  .playPlaylist(
+                                                      imageUrls: controller
+                                                          .song
+                                                          .map((element) =>
+                                                              element.imageUrl)
+                                                          .toList(),
+                                                      names: controller
+                                                          .song
+                                                          .map(
+                                                              (e) => e.songName)
+                                                          .toList(),
+                                                      beatIds: controller.song
+                                                          .map((e) => e.id)
+                                                          .toList(),
+                                                      beatUrls: controller.song
+                                                          .map((element) =>
+                                                              element.songUrl)
+                                                          .toList());
+                                            },
+                                            child: const Icon(Icons.play_arrow),
+                                          )
                                         ],
                                       ),
                                       const SizedBox(
@@ -105,8 +129,57 @@ class _ArtistProfileState extends State<ArtistProfile> {
                                 ),
                               ),
                               ListTile(
+                                  onLongPress: () {
+                                    showModalBottomSheet(
+                                      context: context,
+                                      builder: (context) {
+                                        return Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            ListTile(
+                                                onTap: () {
+                                                  print("hello world");
+                                                  Get.find<NavBarController>()
+                                                      .addLikeSong(
+                                                          onSucesss: () {
+                                                            Get.back();
+                                                          },
+                                                          beatId: controller
+                                                              .song[index].id);
+                                                },
+                                                title: const Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.favorite,
+                                                      color: Colors.red,
+                                                    ),
+                                                    SizedBox(
+                                                      width: 20,
+                                                    ),
+                                                    Text("Add to Favourite"),
+                                                  ],
+                                                )),
+                                            ListTile(
+                                                onTap: () {},
+                                                title: const Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.report,
+                                                      color: Colors.red,
+                                                    ),
+                                                    SizedBox(
+                                                      width: 20,
+                                                    ),
+                                                    Text("Report Song"),
+                                                  ],
+                                                ))
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
                                   onTap: () {
-                                    Get.find<NavBarController>().changeMusic(
+                                    Get.find<NavBarController>().playSingleSong(
                                         imageUrl: controller
                                                     .song[index].imageUrl ==
                                                 ""

@@ -117,7 +117,7 @@ class Homepage extends StatelessWidget {
                                 onTap: () {
                                   SongModel beatModel =
                                       freeBeatController.trendingSong[index];
-                                  musicController.changeMusic(
+                                  musicController.playSingleSong(
                                       beatId: beatModel.id,
                                       imageUrl: beatModel.imageUrl,
                                       name: beatModel.songName,
@@ -218,9 +218,10 @@ class Homepage extends StatelessWidget {
                 ),
                 SizedBox(height: 15.h),
                 rowHeading(
-                    text: "Trending Producers",
+                    text: "Trending Artists",
                     ontap: () {
-                      Get.to(const ProducerView());
+                      Get.to(
+                          ProducerView(artistProfile: controller.artist.value));
                     }),
                 SizedBox(height: 15.h),
                 Obx(
@@ -295,7 +296,7 @@ class Homepage extends StatelessWidget {
                         shrinkWrap: true,
                         itemBuilder: (context, index) => ListTile(
                               onTap: () {
-                                musicController.changeMusic(
+                                musicController.playSingleSong(
                                     beatId:
                                         freeBeatController.freeBeats[index].id!,
                                     imageUrl: freeBeatController

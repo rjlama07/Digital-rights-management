@@ -5,6 +5,7 @@ import 'package:get/state_manager.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:nepalihiphub/constant/api.dart';
+import 'package:nepalihiphub/services/beats_services.dart';
 import 'package:nepalihiphub/view/beats_page/user_library_page.dart';
 import 'package:nepalihiphub/view/home_page/home_navigator.dart';
 import 'package:nepalihiphub/view/profile/profile_page.dart';
@@ -20,14 +21,15 @@ class NavBarController extends GetxController {
   RxBool isPlaying = false.obs;
   Rx<Duration> duration = Duration.zero.obs;
   Rx<Duration> position = Duration.zero.obs;
+  RxBool isPlayList = false.obs;
+
+  final dio = Dio();
 
   @override
   void dispose() {
     super.dispose();
     audioPlayer.dispose();
   }
-
-  final dio = Dio();
 
   Future<void> addStreamCount(String songId) async {
     try {
@@ -42,15 +44,24 @@ class NavBarController extends GetxController {
     }
   }
 
-  void changeMusic({
+  Future<void> addLikeSong(
+      {required String beatId, required Function onSucesss}) async {
+    final response = await BeatServices().addLikedSong(beatId);
+    response.fold((l) {
+      Get.snackbar("Success", "Song added to liked list");
+    }, (r) {
+      Get.snackbar("Error", r);
+    });
+  }
+
+  void playSingleSong({
     required String imageUrl,
     required String name,
     required String beatId,
     required String beatUrl,
-    bool isPlayList = false,
-    List<String>? songUrls,
   }) {
     isCurrentlyPlaying.value = false;
+    isPlayList.value = false;
 
     imageURL = imageUrl;
     label = name;
@@ -70,6 +81,37 @@ class NavBarController extends GetxController {
     audioPlayer.play();
     audioPlayer.play();
     addStreamCount(beatId);
+    update();
+  }
+
+  void playPlaylist({
+    required List<String> imageUrls,
+    required List<String> names,
+    required List<String> beatIds,
+    required List<String> beatUrls,
+  }) {
+    isPlayList.value = false;
+    isCurrentlyPlaying.value = false;
+    final playList = ConcatenatingAudioSource(
+      children: List.generate(
+        beatUrls.length,
+        (index) => AudioSource.uri(
+          Uri.parse(beatUrls[index]),
+          tag: MediaItem(
+            id: beatIds[index],
+            album: names[index],
+            title: names[index],
+            artUri: Uri.parse(imageUrls[index]),
+          ),
+        ),
+      ),
+    );
+    audioPlayer.setLoopMode(LoopMode.all);
+    audioPlayer.setAudioSource(playList);
+
+    isCurrentlyPlaying.value = true;
+    isPlaying.value = true;
+    audioPlayer.play();
     update();
   }
 

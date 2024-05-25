@@ -31,7 +31,7 @@ class FavouritePage extends StatelessWidget {
                     final data = controller.freeBeats[index];
                     return InkWell(
                       onTap: () {
-                        Get.find<NavBarController>().changeMusic(
+                        Get.find<NavBarController>().playSingleSong(
                             beatId: data.id!,
                             imageUrl: data.imageUrl!,
                             name: data.beatName!,

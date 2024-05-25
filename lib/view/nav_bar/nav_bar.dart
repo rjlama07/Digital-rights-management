@@ -1,7 +1,8 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:nepalihiphub/controller/nav_bar_controller.dart';
 import 'package:nepalihiphub/view/home_page/home_navigator.dart';
 import 'package:nepalihiphub/view/nav_bar/music_bottom_sheet.dart';
@@ -20,10 +21,17 @@ class NavBar extends StatelessWidget {
           ? const SizedBox()
           : SizedBox(
               height: 60,
-              child: CustomPlayer(
-                  name: controller.label,
-                  imageUrl: controller.imageURL,
-                  beatUrl: controller.beatURL),
+              child: StreamBuilder<SequenceState?>(
+                stream: controller.audioPlayer.sequenceStateStream,
+                builder: (context, snapshot) {
+                  final state = snapshot.data;
+                  final metaData = state!.currentSource!.tag as MediaItem;
+                  return CustomPlayer(
+                      name: metaData.title,
+                      imageUrl: metaData.artUri.toString(),
+                      beatUrl: controller.beatURL);
+                },
+              ),
             )),
       body: Obx(() => IndexedStack(
           index: controller.selectedIndex.value, children: controller.pages)),
@@ -58,7 +66,6 @@ class NavBar extends StatelessWidget {
             selectedIndex: controller.selectedIndex.value,
             onTabChange: (index) {
               controller.selectedIndex.value = index;
-            
 
               if (index == 0) {
                 homeNavKey.currentState!.pushReplacementNamed(
@@ -121,64 +128,79 @@ class _CustomPlayerState extends State<CustomPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
-      child: InkWell(
-        onTap: () {
-          showModalBottomSheet(
-            backgroundColor: Colors.transparent,
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20))),
-            isScrollControlled: true,
-            context: context,
-            builder: (context) {
-              return MusicBottomSheet(
-                  imageUrl: widget.imageUrl,
-                  beatUrl: widget.beatUrl,
-                  name: widget.name);
+    return Obx(() => Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+          child: InkWell(
+            onTap: () {
+              showModalBottomSheet(
+                backgroundColor: Colors.transparent,
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20))),
+                isScrollControlled: true,
+                context: context,
+                builder: (context) {
+                  return StreamBuilder<SequenceState?>(
+                    stream: Get.find<NavBarController>()
+                        .audioPlayer
+                        .sequenceStateStream,
+                    builder: (context, snapshot) {
+                      final metaDta =
+                          snapshot.data?.currentSource?.tag as MediaItem;
+                      return MusicBottomSheet(
+                        imageUrl: metaDta.artUri.toString(),
+                        beatUrl: widget.beatUrl,
+                        name: metaDta.title ?? "",
+                      );
+                    },
+                  );
+                },
+              );
             },
-          );
-        },
-        child: Row(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  image: DecorationImage(
-                      fit: BoxFit.cover, image: NetworkImage(widget.imageUrl))),
-              height: 80,
-              width: 60,
+            child: Row(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: NetworkImage(widget.imageUrl))),
+                  height: 80,
+                  width: 60,
+                ),
+                const SizedBox(width: 10),
+                Text(widget.name),
+                const Spacer(),
+                // InkWell(
+                //     onTap: () async {
+                //       if (widget.controller.isPlaying.value) {
+                //         widget.controller.audioPlayer.pause();
+                //         widget.controller.isPlaying.value = false;
+                //       } else {
+                //         await widget.controller.audioPlayer
+                //             .play();
+                //         widget.controller.isPlaying.value = true;
+                //       }
+                //     },
+                //     child: Obx(
+                //       () => Icon(
+                //         widget.controller.isPlaying.value
+                //             ? Icons.pause
+                //             : Icons.play_arrow,
+                //         size: 26,
+                //       ),
+                //     )),
+                Control(
+                  audioPlayer: widget.controller.audioPlayer,
+                  isPlaylist: Get.find<NavBarController>().isPlayList.value,
+                ),
+
+                const SizedBox(width: 10),
+              ],
             ),
-            const SizedBox(width: 10),
-            Text(widget.name),
-            const Spacer(),
-            // InkWell(
-            //     onTap: () async {
-            //       if (widget.controller.isPlaying.value) {
-            //         widget.controller.audioPlayer.pause();
-            //         widget.controller.isPlaying.value = false;
-            //       } else {
-            //         await widget.controller.audioPlayer
-            //             .play();
-            //         widget.controller.isPlaying.value = true;
-            //       }
-            //     },
-            //     child: Obx(
-            //       () => Icon(
-            //         widget.controller.isPlaying.value
-            //             ? Icons.pause
-            //             : Icons.play_arrow,
-            //         size: 26,
-            //       ),
-            //     )),
-            Control(audioPlayer: widget.controller.audioPlayer),
-            const SizedBox(width: 10),
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 }
 
@@ -190,5 +212,3 @@ String formatTime(Duration duration) {
 
   return [if (duration.inHours > 0) hours, minutes, seconds].join(":");
 }
-
-

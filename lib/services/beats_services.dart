@@ -45,11 +45,26 @@ class BeatServices {
     }
   }
 
+  Future<Either<bool, String>> addLikedSong(String beatId) async {
+    String accessToken = box.get("accessToken") ?? "";
+    final headers = {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'Charset': 'utf-8',
+      'authorization': 'Bearer $accessToken'
+    };
 
-  
+    try {
+      await dio.put(addLikedSongUrl,
+          data: {"songId": beatId}, options: Options(headers: headers));
+      return left(true);
+    } on DioException catch (e) {
+      return right("Something went wrong:$e");
+    } catch (e) {
+      return right("Something went wrong");
+    }
+  }
 
-  Future<Either<SearchModel, String>> searchBeat(
-      String queryParameter) async {
+  Future<Either<SearchModel, String>> searchBeat(String queryParameter) async {
     String accessToken = box.get("accessToken") ?? "";
     final headers = {
       'Content-Type': 'application/json;charset=UTF-8',

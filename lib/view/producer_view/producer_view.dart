@@ -1,13 +1,17 @@
+import 'dart:ui';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_core/get_core.dart';
-import 'package:get/get_instance/get_instance.dart';
-import 'package:get/get_navigation/get_navigation.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:nepalihiphub/constant/app_colors.dart';
 import 'package:nepalihiphub/controller/producer_profile_controller.dart';
+import 'package:nepalihiphub/model/artist_model.dart';
 import 'package:nepalihiphub/view/producer_view/artist_profile.dart';
 
 class ProducerView extends StatelessWidget {
-  const ProducerView({super.key});
+  const ProducerView({Key? key, required this.artistProfile}) : super(key: key);
+  final List<ArtistModel> artistProfile;
 
   @override
   Widget build(BuildContext context) {
@@ -15,82 +19,61 @@ class ProducerView extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            child: Obx(
-              () => Column(
-                mainAxisAlignment: controller.isLoading.value
-                    ? MainAxisAlignment.center
-                    : MainAxisAlignment.start,
-                crossAxisAlignment: controller.isLoading.value
-                    ? CrossAxisAlignment.center
-                    : CrossAxisAlignment.start,
-                children: [
-                  if (!controller.isLoading.value)
-                    const Text("Choose Producers",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 20),
-                  Obx(() => controller.isLoading.value
-                      ? const Center(
-                          child: CircularProgressIndicator(),
-                        )
-                      : Expanded(
-                          child: RefreshIndicator(
-                            onRefresh: () => controller.getProducers(),
-                            child: GridView.builder(
-                              scrollDirection: Axis.vertical,
-                              itemCount: controller.producers.length,
-                              semanticChildCount: 2,
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2),
-                              itemBuilder: (context, index) {
-                                return InkWell(
-                                  onTap: () {
-                                    // Get.to(ArtistProfile(
-                                    //     producerModel:
-                                    //         controller.producers[index]));
-                                  },
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      CircleAvatar(
-                                        radius: 50,
-                                        backgroundImage: NetworkImage(controller
-                                            .producers[index].profileUrl),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Text(controller.producers[index].name,
-                                          style: const TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold)),
-                                      Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: List.generate(
-                                              5,
-                                              (rowIndex) => Icon(
-                                                    Icons.star,
-                                                    color: rowIndex <
-                                                            (int.parse(
-                                                                controller
-                                                                    .producers[
-                                                                        index]
-                                                                    .rating))
-                                                        ? Colors.yellow[400]
-                                                        : Colors.grey,
-                                                  )))
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          child: GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+            ),
+            itemCount: controller.artist.length,
+            itemBuilder: (context, index) {
+              return InkWell(
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => ArtistProfile(
+                    artistModel: controller.artist[index],
+                  ),
+                )),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: secondaryBackgroundColor,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        height: 100.h,
+                        width: 126.w,
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: NetworkImage(
+                                controller.artist[index].profileUrl),
                           ),
-                        ))
-                ],
-              ),
-            )),
+                          borderRadius: const BorderRadius.only(
+                            topRight: Radius.circular(8),
+                            topLeft: Radius.circular(8),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Center(
+                          child: Text(
+                            controller.artist[index].name,
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
       ),
     );
   }

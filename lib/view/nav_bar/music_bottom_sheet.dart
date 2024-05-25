@@ -146,9 +146,13 @@ class _MusicBottomSheetState extends State<MusicBottomSheet>
                   );
                 },
               ),
-              
+
               SizedBox(height: 30.h),
-              Control(audioPlayer: controller.audioPlayer, iconsize: 30.h),
+              Control(
+                audioPlayer: controller.audioPlayer,
+                iconsize: 30.h,
+                isPlaylist: Get.find<NavBarController>().isPlayList.value,
+              ),
               // InkWell(
               //   onTap: () async {
               //     if (controller.isPlaying.value) {

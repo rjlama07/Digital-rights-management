@@ -1,4 +1,4 @@
-String baseURl = "http://192.168.1.122:3000/";
+String baseURl = "http://192.168.1.66:3000/";
 // String baseURl = "https://drm-8gc9.onrender.com/";
 String loginUrl = "${baseURl}user/login";
 String signUpUrl = "${baseURl}user/signup";
@@ -26,3 +26,4 @@ String deleteSongUrl = "${baseURl}song/deleteSong";
 String addStreamCountUrl = "${baseURl}song/addSongCount";
 
 String getTrendingSongUrl = "${baseURl}song/trendingSongs";
+String addLikedSongUrl = "${baseURl}song/addLikedSong";
