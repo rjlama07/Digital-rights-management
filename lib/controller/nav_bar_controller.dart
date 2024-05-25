@@ -119,7 +119,7 @@ class NavBarController extends GetxController {
   List<Widget> pages = const [
     HomeNavigator(),
     UserLibraryPage(),
+    AlbumScreens(),
     ProfilePage(),
-    AlbumScreens()
   ];
 }

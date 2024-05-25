@@ -63,7 +63,6 @@ class MyApp extends StatelessWidget {
                 return GetMaterialApp(
                   themeMode: ThemeMode.dark,
                   debugShowCheckedModeBanner: false,
-                  title: 'Flutter Demo',
                   darkTheme: ThemeData.dark().copyWith(
                       elevatedButtonTheme: ElevatedButtonThemeData(
                         style: ElevatedButton.styleFrom(

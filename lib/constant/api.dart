@@ -27,3 +27,6 @@ String addStreamCountUrl = "${baseURl}song/addSongCount";
 
 String getTrendingSongUrl = "${baseURl}song/trendingSongs";
 String addLikedSongUrl = "${baseURl}song/addLikedSong";
+
+String getAlbumsUrl = "${baseURl}album/getAlbums";
+String buyAlbumUrl = "${baseURl}album/buyAlbums";
