@@ -56,7 +56,11 @@ class NavBar extends StatelessWidget {
               ),
               GButton(
                 icon: Icons.music_note,
-                text: 'Beats',
+                text: 'Your Library',
+              ),
+              GButton(
+                icon: Icons.album,
+                text: 'Albums',
               ),
               GButton(
                 icon: Icons.account_circle_rounded,

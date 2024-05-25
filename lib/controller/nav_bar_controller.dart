@@ -6,6 +6,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:nepalihiphub/constant/api.dart';
 import 'package:nepalihiphub/services/beats_services.dart';
+import 'package:nepalihiphub/view/album/screens/album_screens.dart';
 import 'package:nepalihiphub/view/beats_page/user_library_page.dart';
 import 'package:nepalihiphub/view/home_page/home_navigator.dart';
 import 'package:nepalihiphub/view/profile/profile_page.dart';
@@ -118,6 +119,7 @@ class NavBarController extends GetxController {
   List<Widget> pages = const [
     HomeNavigator(),
     UserLibraryPage(),
-    ProfilePage()
+    ProfilePage(),
+    AlbumScreens()
   ];
 }
